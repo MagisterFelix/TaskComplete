@@ -74,7 +74,7 @@ class Task(models.Model):
         LOW = 3, 'Low priority'
 
     class Reminder(models.IntegerChoices):
-        DEFAULT = 0, 'Not remind'
+        DEFAULT = 0, 'No reminder'
         THREE_DAYS = 1, 'Warn three days before the end'
         ONE_DAY = 2, 'Warn one day before the end'
         THREE_HOURS = 3, 'Warn three hours before the end'
