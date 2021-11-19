@@ -1,5 +1,8 @@
 from django.db import models
+from django.core.validators import ValidationError
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+
+from datetime import datetime
 
 
 class UserManager(BaseUserManager):
@@ -80,7 +83,11 @@ class Task(models.Model):
         THREE_HOURS = 3, 'Warn three hours before the end'
         ONE_HOUR = 4, 'Warn one hour before the end'
 
-    date = models.DateField()
+    def validate_date(date):
+        if date <= datetime.today().date():
+            raise ValidationError('Date must be at least tomorrow', code='invalid')
+
+    date = models.DateField(validators=[validate_date])
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=512, blank=True)
