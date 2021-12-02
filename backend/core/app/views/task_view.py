@@ -21,6 +21,7 @@ class TaskView(APIView):
             message = 'Tasks received successfully.'
         else:
             task = Task.objects.filter(id=primary_key)
+
             if task.exists():
                 data = task.values().first()
                 success = True
@@ -69,6 +70,7 @@ class TaskView(APIView):
             message = 'Task id is required.'
         else:
             task = Task.objects.filter(id=primary_key)
+
             if task.exists():
                 serializer = self.serializer_class(task.first(), data=request.data)
 
