@@ -12,4 +12,4 @@ class Extra(models.Model):
         db_table = 'extra'
 
     def __str__(self):
-        return self.task
+        return self.information
