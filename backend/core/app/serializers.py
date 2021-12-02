@@ -52,8 +52,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'email', 'name'
+            'email', 'name', 'image', 'premium'
         )
+        extra_kwargs = {'email': {'required': False}}
 
 
 class TaskSerializer(serializers.ModelSerializer):
