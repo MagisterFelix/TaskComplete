@@ -20,8 +20,9 @@ class TaskView(APIView):
             status_code = status.HTTP_200_OK
             message = 'Tasks received successfully.'
         else:
-            if Task.objects.filter(id=primary_key).exists():
-                data = Task.objects.filter(id=primary_key).values().first()
+            task = Task.objects.filter(id=primary_key)
+            if task.exists():
+                data = task.values().first()
                 success = True
                 status_code = status.HTTP_200_OK
                 message = 'Task received successfully.'
