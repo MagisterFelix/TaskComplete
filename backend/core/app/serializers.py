@@ -57,18 +57,32 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    date = serializers.DateField(required=False)
+    title = serializers.CharField(required=False)
+
     class Meta:
         model = Task
         fields = (
-            'date', 'title', 'description', 'priority', 'reminder'
+            'date', 'title', 'description', 'priority', 'reminder', 'done'
         )
+
+    def validate(self, data):
+        if data.get('done') is None:
+            errors = {}
+            if data.get('date') is None:
+                errors['date'] = 'This field is required.'
+            if data.get('title') is None:
+                errors['title'] = 'This field is required.'
+            if errors:
+                raise serializers.ValidationError(errors)
+        return data
 
 
 class SubtaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subtask
         fields = (
-            'task', 'title'
+            'task', 'title', 'done'
         )
 
 

@@ -75,10 +75,16 @@ class TaskView(APIView):
                 serializer = self.serializer_class(task.first(), data=request.data)
 
                 if serializer.is_valid():
-                    serializer.save(owner=request.user)
-                    success = True
-                    status_code = status.HTTP_200_OK
-                    message = 'Task updated successfully.'
+                    if serializer.validated_data.get('done'):
+                        task.delete()
+                        success = True
+                        status_code = status.HTTP_200_OK
+                        message = 'Task completed successfully.'
+                    else:
+                        serializer.save(owner=request.user)
+                        success = True
+                        status_code = status.HTTP_200_OK
+                        message = 'Task updated successfully.'
                 else:
                     success = False
                     message = serializer.errors
