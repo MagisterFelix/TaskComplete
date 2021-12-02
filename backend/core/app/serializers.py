@@ -11,7 +11,7 @@ from .models import User, Task, Subtask, Tag, Extra
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'password', 'time_zone')
+        fields = ('email', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):

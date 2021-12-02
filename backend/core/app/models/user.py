@@ -1,22 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
+
 class UserManager(BaseUserManager):
 
-    def create_user(self, email, password, name=None, time_zone=None):
+    def create_user(self, email, password, name=None):
         if email is None:
             raise ValueError('Users must have an email.')
 
         if name is None:
             name = email[:email.find('@')].capitalize()
 
-        if time_zone is None:
-            time_zone = 'UTC'
-
         user = self.model(
             email=self.normalize_email(email),
-            name=name,
-            time_zone=time_zone
+            name=name
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -50,7 +47,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=64, blank=True)
     premium = models.CharField(max_length=256, blank=True)
     image = models.CharField(max_length=128, default='https://i.imgur.com/V4RclNb.png', blank=True)
-    time_zone = models.CharField(max_length=32, default='UTC')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

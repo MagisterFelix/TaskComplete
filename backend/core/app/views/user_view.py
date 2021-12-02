@@ -8,13 +8,9 @@ from core.app.models import User
 from core.app.serializers import UserRegistrationSerializer, UserLoginSerializer, ProfileSerializer
 
 
-LOGIN_FAILS = {
+AUTH_FAILS = {
     'email': 'User must have an email.',
     'password': 'User must have a password.'
-}
-REGISTRATION_FAILS = {
-    **LOGIN_FAILS,
-    'time_zone': 'Time zone is required.'
 }
 
 
@@ -23,7 +19,7 @@ class UserRegistrationView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        for key, value in REGISTRATION_FAILS.items():
+        for key, value in AUTH_FAILS.items():
             if not request.data.get(key):
                 success = False
                 status_code = status.HTTP_400_BAD_REQUEST
@@ -39,9 +35,7 @@ class UserRegistrationView(APIView):
                 message = 'User registered successfully.'
             else:
                 success = False
-                message = ''
-                for value in serializer.errors.values():
-                    message += value[0][:-1].capitalize() + '.'
+                message = serializer.errors
                 status_code = status.HTTP_400_BAD_REQUEST
 
         response = {
@@ -58,7 +52,7 @@ class UserLoginView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        for key, value in LOGIN_FAILS.items():
+        for key, value in AUTH_FAILS.items():
             if not request.data.get(key):
                 success = False
                 status_code = status.HTTP_400_BAD_REQUEST
@@ -75,9 +69,7 @@ class UserLoginView(APIView):
                 token = serializer.data['token']
             else:
                 success = False
-                message = ''
-                for value in serializer.errors.values():
-                    message += value[0][:-1].capitalize() + '.'
+                message = serializer.errors
                 status_code = status.HTTP_404_NOT_FOUND
                 token = None
 
