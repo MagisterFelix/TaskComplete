@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from .views import UserRegistrationView, UserLoginView, UserProfileView
+from core.app.views.user_view import UserRegistrationView, UserLoginView, UserProfileView
 
 urlpatterns = [
     url(r'^signUp/?$', UserRegistrationView.as_view()),
