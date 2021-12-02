@@ -5,7 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 
-from .models import User
+from .models import User, Task
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -53,4 +53,12 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             'email', 'name'
+        )
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = (
+            'date', 'title', 'description', 'priority', 'reminder'
         )
