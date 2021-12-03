@@ -99,8 +99,7 @@ class UserProfileView(APIView):
             'email': user.email,
             'name': user.name,
             'image': user.image,
-            'premium':  bool(user.premium),
-            'time_zone': user.time_zone
+            'premium':  bool(user.premium)
         }
 
         response = {
