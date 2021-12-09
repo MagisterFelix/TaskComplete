@@ -35,12 +35,14 @@ class UserRegistrationView(APIView):
                 message = 'User registered successfully.'
             else:
                 success = False
-                message = serializer.errors
+                message = ''
+                for value in serializer.errors.values():
+                    message += value[0][:-1].capitalize() + '.'
                 status_code = status.HTTP_400_BAD_REQUEST
 
         response = {
             'success': success,
-            'status code': status_code,
+            'status_code': status_code,
             'message': message,
         }
 
@@ -69,13 +71,15 @@ class UserLoginView(APIView):
                 token = serializer.data['token']
             else:
                 success = False
-                message = serializer.errors
+                message = ''
+                for value in serializer.errors.values():
+                    message += value[0][:-1].capitalize() + '.'
                 status_code = status.HTTP_404_NOT_FOUND
                 token = None
 
         response = {
             'success': success,
-            'status code': status_code,
+            'status_code': status_code,
             'message': message,
             'token': token
         }
@@ -123,12 +127,14 @@ class UserProfileView(APIView):
             message = 'User updated successfully.'
         else:
             success = False
-            message = serializer.errors
+            message = ''
+            for value in serializer.errors.values():
+                message += value[0][:-1].capitalize() + '.'
             status_code = status.HTTP_400_BAD_REQUEST
 
         response = {
             'success': success,
-            'status code': status_code,
+            'status_code': status_code,
             'message': message
         }
 

@@ -45,7 +45,7 @@ class TagView(APIView):
 
         response = {
             'success': success,
-            'status code': status_code,
+            'status_code': status_code,
             'message': message,
             'data': data
         }
@@ -66,7 +66,9 @@ class TagView(APIView):
                 message = 'Tag created successfully.'
             else:
                 success = False
-                message = serializer.errors
+                message = ''
+                for value in serializer.errors.values():
+                    message += value[0][:-1].capitalize() + '.'
                 status_code = status.HTTP_400_BAD_REQUEST
         else:
             data = None
@@ -76,7 +78,7 @@ class TagView(APIView):
 
         response = {
             'success': success,
-            'status code': status_code,
+            'status_code': status_code,
             'message': message
         }
 
@@ -104,7 +106,9 @@ class TagView(APIView):
                         message = 'Tag updated successfully.'
                     else:
                         success = False
-                        message = serializer.errors
+                        message = ''
+                        for value in serializer.errors.values():
+                            message += value[0][:-1].capitalize() + '.'
                         status_code = status.HTTP_400_BAD_REQUEST
                 else:
                     success = False
@@ -118,7 +122,7 @@ class TagView(APIView):
 
         response = {
             'success': success,
-            'status code': status_code,
+            'status_code': status_code,
             'message': message
         }
 
@@ -152,7 +156,7 @@ class TagView(APIView):
 
         response = {
             'success': success,
-            'status code': status_code,
+            'status_code': status_code,
             'message': message
         }
 

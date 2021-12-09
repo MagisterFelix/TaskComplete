@@ -35,7 +35,7 @@ class TaskView(APIView):
 
         response = {
             'success': success,
-            'status code': status_code,
+            'status_code': status_code,
             'message': message,
             'data': data
         }
@@ -52,12 +52,14 @@ class TaskView(APIView):
             message = 'Task created successfully.'
         else:
             success = False
-            message = serializer.errors
+            message = ''
+            for value in serializer.errors.values():
+                message += value[0][:-1].capitalize() + '.'
             status_code = status.HTTP_400_BAD_REQUEST
 
         response = {
             'success': success,
-            'status code': status_code,
+            'status_code': status_code,
             'message': message
         }
 
@@ -87,7 +89,9 @@ class TaskView(APIView):
                         message = 'Task updated successfully.'
                 else:
                     success = False
-                    message = serializer.errors
+                    message = ''
+                    for value in serializer.errors.values():
+                        message += value[0][:-1].capitalize() + '.'
                     status_code = status.HTTP_400_BAD_REQUEST
             else:
                 success = False
@@ -96,7 +100,7 @@ class TaskView(APIView):
 
         response = {
             'success': success,
-            'status code': status_code,
+            'status_code': status_code,
             'message': message
         }
 
@@ -122,7 +126,7 @@ class TaskView(APIView):
 
         response = {
             'success': success,
-            'status code': status_code,
+            'status_code': status_code,
             'message': message
         }
 
