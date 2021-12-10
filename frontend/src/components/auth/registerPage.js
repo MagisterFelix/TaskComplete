@@ -132,7 +132,7 @@ export class Register extends React.Component {
         const { formErrors } = this.state;
 
         return (
-            <div className="main" style={{ backgroundImage: "url(" + backgroundImage + ")" }}>
+            <div className="auth-container" style={{ backgroundImage: "url(" + backgroundImage + ")" }}>
                 <div className="auth">
                     <Modal show={this.state.showHide}>
                         <Modal.Header closeButton onClick={() => this.handleModalShowHide()}>
@@ -144,7 +144,9 @@ export class Register extends React.Component {
                     </Modal>
                     <div className="wrapper">
                         <div className="row">
-                            <div className="header">Register</div>
+                            <div className="col">
+                                <div className="header">Register</div>
+                            </div>
                         </div>
                         <div className="row">
                             <div className="content">
@@ -195,8 +197,10 @@ export class Register extends React.Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="footer">
-                                            <button type="submit" className="button">Register</button>
+                                        <div className="col">
+                                            <div className="footer">
+                                                <button type="submit" className="button">Register</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>

@@ -1,0 +1,111 @@
+.profile {
+    text-align: center;
+    height: 40em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2em;
+    position: relative;
+    z-index: 99;
+
+    .wrapper {
+        background-color: #fff;
+        box-shadow: 0px 0px 12px 2px rgba(15, 15, 15, 0.2);
+        border-radius: 1em;
+        position: relative;
+        padding: 10px;
+        z-index: 1;
+
+        .header {
+            margin-top: 1em;
+            font-size: 24px;
+            font-family: "Open Sans", sans-serif;
+        }
+
+        .content {
+
+            .image img {
+                width: 100%;
+                height: 100%;
+            }
+
+            .form {
+
+                .form-group {
+                    text-align: left;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    width: fit-content;
+
+                    label {
+                        position: relative;
+                        width: 100%;
+                        font-size: 20px;
+
+                        .error {
+                            text-align: right;
+                            color: #f00;
+                            position: absolute;
+                            font-size: 14px;
+                            margin-top: 10px;
+                            right: 0.5em;
+                            animation: fadeIn .6s cubic-bezier(0.4, 0, 0.2, 1) 100ms backwards;
+                        }
+                    }
+
+                    input {
+                        margin-top: 6px;
+                        min-width: 18em;
+                        height: 37px;
+                        padding: 0px 10px;
+                        font-size: 16px;
+                        font-family: "Open Sans", sans-serif;
+                        background-color: #f3f3f3;
+                        border: 0;
+                        border-radius: 4px;
+                        margin-bottom: 0.5em;
+                        transition: all 250ms ease-in-out;
+
+                        &:focus {
+                            outline: none;
+                            box-shadow: 0px 0px 12px 0.8px #3474dbb2;
+                        }
+
+                        &[type="file"] {
+                            padding: 3px;
+                        }
+                    }
+
+                }
+
+                .footer {
+                    display: flex;
+                    justify-content: flex-end;
+                    padding-bottom: 1em;
+                    padding-right: 2em;
+                }
+            }
+        }
+    }
+}
+
+@keyframes slideUp {
+    0% {
+        transform: translateY(100%);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

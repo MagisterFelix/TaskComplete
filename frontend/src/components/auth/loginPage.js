@@ -61,7 +61,7 @@ export class Login extends React.Component {
 
     render() {
         return (
-            <div className="main" style={{ backgroundImage: "url(" + backgroundImage + ")" }} >
+            <div className="auth-container" style={{ backgroundImage: "url(" + backgroundImage + ")" }} >
                 <div className="auth">
                     <Modal show={this.state.showHide}>
                         <Modal.Header closeButton onClick={() => this.handleModalShowHide()}>
@@ -73,7 +73,9 @@ export class Login extends React.Component {
                     </Modal>
                     <div className="wrapper">
                         <div className="row">
-                            <div className="header">Login</div>
+                            <div className="col">
+                                <div className="header">Login</div>
+                            </div>
                         </div>
                         <div className="row">
                             <div className="content">
@@ -96,8 +98,10 @@ export class Login extends React.Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="footer">
-                                            <button type="submit" className="button">Login</button>
+                                        <div className="col">
+                                            <div className="footer">
+                                                <button type="submit" className="button">Login</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
