@@ -80,11 +80,22 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class SubtaskSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(required=False)
+
     class Meta:
         model = Subtask
         fields = (
             'task', 'title', 'done'
         )
+
+    def validate(self, data):
+        if data.get('done') is None:
+            errors = {}
+            if data.get('title') is None:
+                errors['title'] = 'This field is required.'
+            if errors:
+                raise serializers.ValidationError(errors)
+        return data
 
 
 class TagSerializer(serializers.ModelSerializer):
