@@ -15,12 +15,12 @@ class TaskView(APIView):
 
     def get(self, request, primary_key=None):
         if primary_key is None:
-            data = Task.objects.all().values()
+            data = Task.objects.filter(owner=request.user.id).values()
             success = True
             status_code = status.HTTP_200_OK
             message = 'Tasks received successfully.'
         else:
-            task = Task.objects.filter(id=primary_key)
+            task = Task.objects.filter(owner=request.user.id, id=primary_key)
 
             if task.exists():
                 data = task.values().first()
@@ -71,7 +71,7 @@ class TaskView(APIView):
             status_code = status.HTTP_400_BAD_REQUEST
             message = 'Task id is required.'
         else:
-            task = Task.objects.filter(id=primary_key)
+            task = Task.objects.filter(owner=request.user.id, id=primary_key)
 
             if task.exists():
                 serializer = self.serializer_class(task.first(), data=request.data)
@@ -112,7 +112,7 @@ class TaskView(APIView):
             status_code = status.HTTP_400_BAD_REQUEST
             message = 'Task id is required.'
         else:
-            task = Task.objects.filter(id=primary_key)
+            task = Task.objects.filter(owner=request.user.id, id=primary_key)
 
             if task.exists():
                 task.first().delete()
