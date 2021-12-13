@@ -64,7 +64,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = (
-            'date', 'title', 'description', 'priority', 'reminder', 'done'
+            'owner', 'date', 'title', 'description', 'priority', 'reminder', 'done'
         )
 
     def validate(self, data):

@@ -43,10 +43,11 @@ class TaskView(APIView):
         return Response(response, status=status_code)
 
     def post(self, request):
+        request.data['owner'] = request.user.id
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
-            serializer.save(owner=request.user)
+            serializer.save()
             success = True
             status_code = status.HTTP_201_CREATED
             message = 'Task created successfully.'
@@ -74,6 +75,7 @@ class TaskView(APIView):
             task = Task.objects.filter(owner=request.user.id, id=primary_key)
 
             if task.exists():
+                request.data['owner'] = request.user.id
                 serializer = self.serializer_class(task.first(), data=request.data)
 
                 if serializer.is_valid():
@@ -83,7 +85,7 @@ class TaskView(APIView):
                         status_code = status.HTTP_200_OK
                         message = 'Task completed successfully.'
                     else:
-                        serializer.save(owner=request.user)
+                        serializer.save()
                         success = True
                         status_code = status.HTTP_200_OK
                         message = 'Task updated successfully.'
