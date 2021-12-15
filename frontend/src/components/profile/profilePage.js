@@ -1,21 +1,22 @@
 import React from "react";
 import "./style.scss";
-import { Navbar } from "../navigation/navbar";
 import axios from 'axios';
 import API from '../../api/links';
-import { Modal } from "react-bootstrap";
 import profileImage from './profile.svg';
+import GooglePayButton from '@google-pay/button-react';
+
+const headers = {
+    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+};
 
 export class Profile extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            showHide: false,
-            username: null,
-            formErrors: {
-                username: "",
-            }
+            username: null
         }
     }
 
@@ -33,119 +34,116 @@ export class Profile extends React.Component {
         })
     }
 
-    handleModalShowHide() {
-        this.setState({ showHide: !this.state.showHide })
-    }
-
     handleSubmit = e => {
         e.preventDefault();
 
         if (e.target[1].files.length) {
             this.uploadImage(e.target[1].files[0])
                 .then(response => {
-                    axios.put(API.profile, { image: response.data.data.url }, { headers })
-                        .then(() => {
-                            this.handleModalShowHide();
-                        }).catch(error => {
-                            console.log(error.response.data);
-                        })
+                    axios.put(API.profile, { image: response.data.data.url }, { headers });
                 })
         }
-        const headers = {
-            'Authorization': 'Bearer ' + localStorage.getItem('token'),
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        };
 
         if (this.state.username) {
-            axios.put(API.profile, { name: this.state.username }, { headers })
-                .then(() => {
-                    this.handleModalShowHide();
-                }).catch(error => {
-                    console.log(error.response.data);
-                })
+            axios.put(API.profile, { name: this.state.username }, { headers });
         }
-        setTimeout(() => { window.location.reload(); }, 2000);
+
+        if (e.target[1].files.length || this.state.username) {
+            setTimeout(() => { window.location.reload(); }, 2000);
+        }
     }
 
     handleChange = e => {
         e.preventDefault();
         const { name, value } = e.target;
-        let formErrors = { ...this.state.formErrors };
 
-        switch (name) {
-            case "username":
-                formErrors.username =
-                    value.length > 2
-                        ? ""
-                        : "Invalid username";
-                break;
-            default:
-                break;
-        }
-
-        this.setState({ formErrors, [name]: value });
+        this.setState({ [name]: value });
     };
 
     render() {
-        const { formErrors } = this.state;
-
         return (
-            <>
-                <Navbar />
-                <div className="profile">
-                    <Modal show={this.state.showHide}>
-                        <Modal.Header closeButton onClick={() => this.handleModalShowHide()}>
-                            <Modal.Title>Info</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            Profile updated successfully!
-                        </Modal.Body>
-                    </Modal>
-                    <div className="wrapper">
-                        <div className="row">
-                            <div className="col">
-                                <div className="header">Profile</div>
-                            </div>
+            <div className="profile">
+                <div className="wrapper">
+                    <div className="row">
+                        <div className="col">
+                            <div className="header">Profile</div>
                         </div>
-                        <div className="row">
-                            <div className="content">
-                                <form className="form" onSubmit={this.handleSubmit}>
-                                    <div className="row mx-4 my-3">
-                                        <div className="col-6">
-                                            <div className="form-group">
-                                                <label htmlFor="username">Username
-                                                    {formErrors.username.length > 0 && (
-                                                        <span className="error">{formErrors.username}</span>
-                                                    )}
-                                                </label>
-                                                <input type="text" name="username" id="username" placeholder="Username" onChange={this.handleChange}
-                                                    className={formErrors.username.length > 0 ? "error" : null} />
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="image">Image</label>
-                                                <input type="file" name="image" id="image" />
-                                            </div>
+                    </div>
+                    <div className="row">
+                        <div className="content">
+                            <form className="form" onSubmit={this.handleSubmit}>
+                                <div className="row mx-4 my-3">
+                                    <div className="col-6">
+                                        <div className="form-group">
+                                            <label htmlFor="username">Username</label>
+                                            <input type="text" name="username" id="username" placeholder="Username" onChange={this.handleChange} />
                                         </div>
-                                        <div className="col-6">
-                                            <div className="image">
-                                                <img src={profileImage} alt="register_image" />
+                                        <div className="form-group">
+                                            <label htmlFor="image">Image</label>
+                                            <input type="file" name="image" id="image" />
+                                        </div>
+                                        {!this.props.user.premium ?
+                                            <div className="form-group mt-4">
+                                                <label htmlFor="premium">Premium - 10$</label>
+                                                <GooglePayButton
+                                                    environment="TEST"
+                                                    paymentRequest={{
+                                                        apiVersion: 2,
+                                                        apiVersionMinor: 0,
+                                                        allowedPaymentMethods: [
+                                                            {
+                                                                type: 'CARD',
+                                                                parameters: {
+                                                                    allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                                                                    allowedCardNetworks: ['MASTERCARD', 'VISA'],
+                                                                },
+                                                                tokenizationSpecification: {
+                                                                    type: 'PAYMENT_GATEWAY',
+                                                                    parameters: {
+                                                                        gateway: 'example',
+                                                                        gatewayMerchantId: 'exampleGatewayMerchantId',
+                                                                    },
+                                                                },
+                                                            },
+                                                        ],
+                                                        transactionInfo: {
+                                                            totalPriceStatus: 'FINAL',
+                                                            totalPriceLabel: 'Total',
+                                                            totalPrice: '10.00',
+                                                            currencyCode: 'USD',
+                                                            countryCode: 'US',
+                                                        },
+                                                    }}
+                                                    onLoadPaymentData={paymentRequest => {
+                                                        axios.put(API.profile, { premium: paymentRequest.paymentMethodData.tokenizationData.token }, { headers });
+                                                        window.location.reload();
+                                                    }}
+                                                />
                                             </div>
+                                            :
+                                            <div className="form-group mt-4">
+                                                <label htmlFor="premium"><i class="fa fa-star" style={{ 'color': '#F7D00E' }}></i> Premium <i class="fa fa-star" style={{ 'color': '#F7D00E' }}></i></label>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div className="col-6">
+                                        <div className="image">
+                                            <img src={profileImage} alt="register_image" />
                                         </div>
                                     </div>
-                                    <div className="row">
-                                        <div className="col">
-                                            <div className="footer">
-                                                <button type="submit" className="button">Submit</button>
-                                            </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col">
+                                        <div className="footer">
+                                            <button type="submit" className="button">Submit</button>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </>
+            </div>
         );
     }
 }

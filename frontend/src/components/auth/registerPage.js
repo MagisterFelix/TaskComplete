@@ -81,6 +81,7 @@ export class Register extends React.Component {
                         .then(response => {
                             localStorage.setItem('token', response.data.token);
                             this.props.history.push('/');
+                            window.location.reload();
                         });
                 })
                 .catch(error => {
