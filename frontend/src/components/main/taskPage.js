@@ -65,6 +65,96 @@ export class Task extends React.Component {
         this._isMounted = false;
     }
 
+    updateEvents(body, prevTitle, prevDate) {
+        let min_date = new Date(prevDate);
+        min_date.setDate(min_date.getDate() - 1);
+
+        this.gapi.client.calendar.events.list({
+            'calendarId': 'primary',
+            "singleEvents": true,
+            "orderBy": "startTime",
+            "timeMin": min_date.toISOString()
+        }).execute((response) => {
+            const event = response.items.filter((item) => {
+                return item.summary === prevTitle;
+            })[0];
+
+            var date = body.date;
+            var title = body.title;
+            var description = body.description;
+            var priority = body.priority;
+            var reminder = body.reminder;
+
+            if (reminder === 1) {
+                reminder = 24 * 60 * 3;
+            } else if (reminder === 2) {
+                reminder = 24 * 60;
+            } else if (reminder === 3) {
+                reminder = 60 * 3;
+            } else if (reminder === 4) {
+                reminder = 60;
+            } else {
+                reminder = 0;
+            }
+
+            if (priority === 1) {
+                priority = 11;
+            } else if (priority === 2) {
+                priority = 5;
+            } else if (priority === 3) {
+                priority = 2;
+            } else {
+                priority = 8;
+            }
+
+            event.summary = title;
+            event.description = description;
+            event.colorId = priority;
+            event.start.date = date;
+            event.end.date = date;
+
+            if (reminder) {
+                event.reminders.overrides = [
+                    {
+                        'method': 'email', 'minutes': reminder
+                    }
+                ]
+            }
+
+            var request = this.gapi.client.calendar.events.patch({
+                'calendarId': 'primary',
+                'eventId': event.id,
+                'resource': event
+            });
+
+            request.execute();
+        });
+    }
+
+    updateInCalendar(body, prevTitle, prevDate) {
+        this.gapi.load('client:auth2', () => {
+
+            this.gapi.client.init({
+                apiKey: this.API_KEY,
+                clientId: this.CLIENT_ID,
+                discoveryDocs: this.DISCOVERY_DOCS,
+                scope: this.SCOPES
+            });
+
+            this.gapi.client.load('calendar', 'v3');
+
+
+            if (this.gapi.auth2.getAuthInstance().isSignedIn.get()) {
+                this.updateEvents(body, prevTitle, prevDate);
+            } else {
+                this.gapi.auth2.getAuthInstance().signIn()
+                    .then(() => {
+                        this.updateEvents(body, prevTitle, prevDate);
+                    })
+            }
+        });
+    }
+
     deleteEvents(id) {
         axios.get(API.task.replace('task_id', id), { headers })
             .then((task) => {
@@ -205,11 +295,17 @@ export class Task extends React.Component {
             reminder: this.state.reminder ? parseInt(this.state.reminder) : this.state.task.reminder
         };
 
+        const title = this.state.task.title;
+        const date = this.state.task.date;
+
         axios.put(API.task.replace('task_id', id), body, { headers })
             .then(() => {
                 this.handleModalShowHide();
                 axios.get(API.tasks, { headers })
                     .then(response => {
+                        if (this.props.user.premium) {
+                            this.updateInCalendar(body, title, date);
+                        }
                         this._isMounted && this.setState({ tasks: response.data.data });
                     });
             })
