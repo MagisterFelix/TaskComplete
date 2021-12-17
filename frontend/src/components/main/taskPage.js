@@ -79,55 +79,58 @@ export class Task extends React.Component {
                 return item.summary === prevTitle;
             })[0];
 
-            var date = body.date;
-            var title = body.title;
-            var description = body.description;
-            var priority = body.priority;
-            var reminder = body.reminder;
+            if (event) {
 
-            if (reminder === 1) {
-                reminder = 24 * 60 * 3;
-            } else if (reminder === 2) {
-                reminder = 24 * 60;
-            } else if (reminder === 3) {
-                reminder = 60 * 3;
-            } else if (reminder === 4) {
-                reminder = 60;
-            } else {
-                reminder = 0;
+                var date = body.date;
+                var title = body.title;
+                var description = body.description;
+                var priority = body.priority;
+                var reminder = body.reminder;
+
+                if (reminder === 1) {
+                    reminder = 24 * 60 * 3;
+                } else if (reminder === 2) {
+                    reminder = 24 * 60;
+                } else if (reminder === 3) {
+                    reminder = 60 * 3;
+                } else if (reminder === 4) {
+                    reminder = 60;
+                } else {
+                    reminder = 0;
+                }
+
+                if (priority === 1) {
+                    priority = 11;
+                } else if (priority === 2) {
+                    priority = 5;
+                } else if (priority === 3) {
+                    priority = 2;
+                } else {
+                    priority = 8;
+                }
+
+                event.summary = title;
+                event.description = description;
+                event.colorId = priority;
+                event.start.date = date;
+                event.end.date = date;
+
+                if (reminder) {
+                    event.reminders.overrides = [
+                        {
+                            'method': 'email', 'minutes': reminder
+                        }
+                    ]
+                }
+
+                var request = this.gapi.client.calendar.events.patch({
+                    'calendarId': 'primary',
+                    'eventId': event.id,
+                    'resource': event
+                });
+
+                request.execute();
             }
-
-            if (priority === 1) {
-                priority = 11;
-            } else if (priority === 2) {
-                priority = 5;
-            } else if (priority === 3) {
-                priority = 2;
-            } else {
-                priority = 8;
-            }
-
-            event.summary = title;
-            event.description = description;
-            event.colorId = priority;
-            event.start.date = date;
-            event.end.date = date;
-
-            if (reminder) {
-                event.reminders.overrides = [
-                    {
-                        'method': 'email', 'minutes': reminder
-                    }
-                ]
-            }
-
-            var request = this.gapi.client.calendar.events.patch({
-                'calendarId': 'primary',
-                'eventId': event.id,
-                'resource': event
-            });
-
-            request.execute();
         });
     }
 
@@ -173,12 +176,14 @@ export class Task extends React.Component {
                         });
                     })[0];
 
-                    var request = this.gapi.client.calendar.events.delete({
-                        'calendarId': 'primary',
-                        'eventId': event.id
-                    });
+                    if (event) {
+                        var request = this.gapi.client.calendar.events.delete({
+                            'calendarId': 'primary',
+                            'eventId': event.id
+                        });
 
-                    request.execute();
+                        request.execute();
+                    }
                 });
             })
     }

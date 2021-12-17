@@ -106,6 +106,10 @@ export class Profile extends React.Component {
                                                                 },
                                                             },
                                                         ],
+                                                        merchantInfo: {
+                                                            merchantId: '12345678901234567890',
+                                                            merchantName: 'Demo Merchant',
+                                                        },
                                                         transactionInfo: {
                                                             totalPriceStatus: 'FINAL',
                                                             totalPriceLabel: 'Total',
