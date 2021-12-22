@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <RelativeLayout
+        android:id="@+id/toLogin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/toLoginButton"
+            android:layout_width="110dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/shape_button"
+            android:text="@string/login"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:paddingBottom="8dp"
+            tools:ignore="TextContrastCheck" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/loginForm"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="@drawable/shadow_box"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical"
+        android:layout_marginTop="50dp"
+        android:paddingTop="50dp"
+        android:paddingHorizontal="50dp">
+
+        <EditText
+            android:id="@+id/registerFormName"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:autofillHints="name"
+            android:hint="@string/username"
+            android:inputType="textPersonName"
+            tools:ignore="TextContrastCheck" />
+
+        <EditText
+            android:id="@+id/registerFormEmail"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:autofillHints="emailAddress" />
+
+        <EditText
+            android:id="@+id/registerFormPassword"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:autofillHints="password"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            tools:ignore="TextContrastCheck"/>
+
+        <EditText
+            android:id="@+id/registerFormRepeatPassword"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:autofillHints="password"
+            android:hint="@string/repeat_password"
+            android:inputType="textPassword"
+            tools:ignore="TextContrastCheck"/>
+
+        <Button
+            android:id="@+id/registerFormButton"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shape_button"
+            android:text="@string/register"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/auth_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        tools:layout_editor_absoluteX="38dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <ImageView
+            android:id="@+id/image_auth_background"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="-20dp"
+            android:layout_marginBottom="-40dp"
+            android:contentDescription="@string/image_auth_background"
+            android:src="@drawable/ic_background_auth"
+            tools:ignore="ImageContrastCheck" />
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
