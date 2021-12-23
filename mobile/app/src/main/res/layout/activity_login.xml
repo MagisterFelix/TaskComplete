@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".views.LoginActivity">
 
     <RelativeLayout
         android:id="@+id/toRegister"
@@ -23,6 +23,7 @@
             android:textColor="@color/white"
             android:textSize="17sp"
             android:paddingBottom="8dp"
+            android:onClick="toRegister"
             tools:ignore="TextContrastCheck" />
     </RelativeLayout>
 
@@ -65,6 +66,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp"
+            android:onClick="login"
             tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
     </LinearLayout>
 

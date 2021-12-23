@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
+    tools:context=".views.RegisterActivity">
 
     <RelativeLayout
         android:id="@+id/toLogin"
@@ -18,11 +18,12 @@
             android:layout_marginStart="50dp"
             android:layout_marginTop="35dp"
             android:background="@drawable/shape_button"
+            android:onClick="toLogin"
+            android:paddingBottom="8dp"
             android:text="@string/login"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="17sp"
-            android:paddingBottom="8dp"
             tools:ignore="TextContrastCheck" />
     </RelativeLayout>
 
@@ -48,11 +49,12 @@
 
         <EditText
             android:id="@+id/registerFormEmail"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:autofillHints="emailAddress" />
+            android:autofillHints="emailAddress"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            tools:ignore="TextContrastCheck" />
 
         <EditText
             android:id="@+id/registerFormPassword"
@@ -83,6 +85,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp"
+            android:onClick="register"
             tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
     </LinearLayout>
 
