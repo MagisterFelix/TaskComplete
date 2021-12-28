@@ -2,6 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".views.MainActivity">
+
+    <item
+        android:id="@+id/sort_by_date"
+        android:title="@string/sort_by_date"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/sort_by_priority"
+        android:title="@string/sort_by_priority"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/logout"
         android:title="@string/logout"

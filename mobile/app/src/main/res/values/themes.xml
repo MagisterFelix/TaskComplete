@@ -10,4 +10,5 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <!-- Customize your theme here. -->
     </style>
+
 </resources>

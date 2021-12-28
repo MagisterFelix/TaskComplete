@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="vertical"
         android:layout_marginTop="100dp"
-        android:paddingTop="50dp"
+        android:paddingVertical="50dp"
         android:paddingHorizontal="50dp">
 
         <EditText
@@ -50,7 +50,7 @@
             android:id="@+id/loginFormPassword"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:autofillHints="emailAddress"
+            android:autofillHints="password"
             android:hint="@string/password"
             android:inputType="textPassword"
             tools:ignore="TextContrastCheck" />
