@@ -2,6 +2,8 @@ import React from "react";
 import axios from 'axios';
 import API from '../../api/links';
 import clearInput from './taskPage';
+import strings from "../../locale/locale"
+
 
 const headers = {
     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -85,7 +87,7 @@ export class Extra extends React.Component {
 
         return (
             <>
-                <h4 className="extras-header text-center my-4">Extra</h4>
+                <h4 className="extras-header text-center my-4">{strings.extra}</h4>
                 {
                     extras.length
                         ?
@@ -97,19 +99,19 @@ export class Extra extends React.Component {
                             </div>
                         </>
                         :
-                        <h2 className="text-gray text-center my-5">No extra</h2>
+                        <h2 className="text-gray text-center my-5">{strings.no_extra}</h2>
                 }
                 <form className="form" onSubmit={this.handleSubmitExtra}>
                     <div className="row">
                         <div className="col-10">
                             <div className="extras-input">
                                 <div className="form-group">
-                                    <input required type="text" name="add_extra" id="add_extra" placeholder="New information..." onChange={this.handleChangeExtra} />
+                                    <input required type="text" name="add_extra" id="add_extra" placeholder={strings.new_extra} onChange={this.handleChangeExtra} />
                                 </div>
                             </div>
                         </div>
                         <div className="col-2 text-right">
-                            <button type="submit" className="button mt-1">Submit</button>
+                            <button type="submit" className="button mt-1">{strings.submit}</button>
                         </div>
                     </div>
                 </form>

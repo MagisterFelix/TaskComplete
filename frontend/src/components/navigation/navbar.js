@@ -4,6 +4,7 @@ import axios from 'axios';
 import API from '../../api/links';
 import { Link } from 'react-router-dom';
 import './style.scss';
+import strings from "../../locale/locale"
 
 const headers = {
     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -186,8 +187,8 @@ export class Navbar extends React.Component {
                             </div>
                             <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 {this.props.user.premium && <button className="dropdown-item" onClick={this.handleClick}>Add to Calendar</button>}
-                                <Link to={'/profile'} className="dropdown-item">Profile</Link>
-                                <Link to={'/login'} className="dropdown-item" onClick={() => { localStorage.removeItem('token'); window.location.href = '/login' }}>Logout</Link>
+                                <Link to={'/profile'} className="dropdown-item">{strings.profile}</Link>
+                                <Link to={'/login'} className="dropdown-item" onClick={() => { localStorage.removeItem('token'); window.location.href = '/login' }}>{strings.logout}</Link>
                             </div>
                         </li>
                     </ul>

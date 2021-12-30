@@ -4,6 +4,8 @@ import axios from 'axios';
 import API from '../../api/links';
 import profileImage from './profile.svg';
 import GooglePayButton from '@google-pay/button-react';
+import strings from "../../locale/locale"
+
 
 const headers = {
     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -66,7 +68,7 @@ export class Profile extends React.Component {
                 <div className="wrapper">
                     <div className="row">
                         <div className="col">
-                            <div className="header">Profile</div>
+                            <div className="header">{strings.profile}</div>
                         </div>
                     </div>
                     <div className="row">
@@ -75,11 +77,11 @@ export class Profile extends React.Component {
                                 <div className="row mx-4 my-3">
                                     <div className="col-6">
                                         <div className="form-group">
-                                            <label htmlFor="username">Username</label>
+                                            <label htmlFor="username">{strings.username}</label>
                                             <input type="text" name="username" id="username" placeholder="Username" onChange={this.handleChange} />
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="image">Image</label>
+                                            <label htmlFor="image">{strings.image}</label>
                                             <input type="file" name="image" id="image" />
                                         </div>
                                         {!this.props.user.premium ?
@@ -139,7 +141,7 @@ export class Profile extends React.Component {
                                 <div className="row">
                                     <div className="col">
                                         <div className="footer">
-                                            <button type="submit" className="button">Submit</button>
+                                            <button type="submit" className="button">{strings.submit}</button>
                                         </div>
                                     </div>
                                 </div>

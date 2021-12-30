@@ -3,6 +3,7 @@ import axios from 'axios';
 import API from '../../api/links';
 import { Modal } from "react-bootstrap";
 import clearInput from "./taskPage";
+import strings from "../../locale/locale"
 
 const headers = {
     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -93,7 +94,7 @@ export class Tag extends React.Component {
             .catch(error => {
                 error = error.response.data.message;
                 if (error.includes("set")) {
-                    error = "This tag is already.";
+                    error = "This tag is already exists.";
                 }
                 this.setState({ errorMessage: error });
                 this.handleModalShowHideError();
@@ -166,7 +167,7 @@ export class Tag extends React.Component {
             <>
                 <Modal show={this.state.showHideError}>
                     <Modal.Header closeButton onClick={() => this.handleModalShowHideError()}>
-                        <Modal.Title>Something wrong...</Modal.Title>
+                        <Modal.Title>{strings.wrong}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {this.state.errorMessage}
@@ -174,7 +175,7 @@ export class Tag extends React.Component {
                 </Modal>
                 <Modal show={this.state.showHide} onEnter={() => { this.updateInput() }}>
                     <Modal.Header closeButton onClick={() => { this.handleModalShowHide(); }}>
-                        <Modal.Title>Updating</Modal.Title>
+                        <Modal.Title>{strings.updating}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <form className="form" onSubmit={this.state.tag && this.handleUpdateTag(this.state.tag.id)}>
@@ -182,13 +183,13 @@ export class Tag extends React.Component {
                                 <div className="col-7">
                                     <div className="tag-input">
                                         <div className="form-group">
-                                            <label htmlFor="input_tag">Title</label>
+                                            <label htmlFor="input_tag">{strings.title}</label>
                                             <input required type="text" name="update_tag" id="update_tag" placeholder="New title..." onChange={this.handleChangeTag} />
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-5 text-right align-self-end">
-                                    <button type="submit" className="button mt-2">Submit</button>
+                                    <button type="submit" className="button mt-2">{strings.submit}</button>
                                 </div>
                             </div>
                         </form>
@@ -200,7 +201,7 @@ export class Tag extends React.Component {
                             <div className="col-7">
                                 <div className="tags-input">
                                     <div className="form-group">
-                                        <input required type="text" name="add_tag" id="add_tag" placeholder="New tag..." onChange={this.handleChangeTag} />
+                                        <input required type="text" name="add_tag" id="add_tag" placeholder={strings.new_tag} onChange={this.handleChangeTag} />
                                     </div>
                                 </div>
                             </div>

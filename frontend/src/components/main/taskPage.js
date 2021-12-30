@@ -7,6 +7,7 @@ import { Subtask } from "./subtaskPage";
 import { Tag } from "./tagPage";
 import { Extra } from "./extraPage";
 import { Modal } from "react-bootstrap";
+import strings from "../../locale/locale"
 
 const headers = {
     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -367,8 +368,8 @@ export class Task extends React.Component {
             return (<></>);
         }
 
-        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const days = [strings.monday, strings.tuesday, strings.wednesday, strings.thursday, strings.friday, strings.saturday, strings.sunday];
+        const months = [strings.january, strings.february, strings.march, strings.april, strings.may, strings.june, strings.july, strings.august, strings.september, strings.october, strings.november, strings.december];
 
         let tasks = [];
         let sorted_tasks = this.state.tasks.sort((a, b) => a.id - b.id);
@@ -438,8 +439,8 @@ export class Task extends React.Component {
                                 </div>
                                 <div className="body row">
                                     <div className="col-6 border-right">
-                                        <h4 className="desc-header text-center mb-3">Description</h4>
-                                        {task.description.length ? <p className="desc-text text-justify mr-4">{task.description}</p> : <h2 className="text-gray text-center mt-5">No Description</h2>}
+                                        <h4 className="desc-header text-center mb-3">{strings.description}</h4>
+                                        {task.description.length ? <p className="desc-text text-justify mr-4">{task.description}</p> : <h2 className="text-gray text-center mt-5">{strings.no_desc}</h2>}
                                     </div>
                                     <div className="col-6 border-left">
                                         <Subtask task={task.id} />
@@ -474,17 +475,17 @@ export class Task extends React.Component {
                                 <div className="col-12">
                                     <div className="row justify-content-start" onClick={() => this.handleModalShowHide()}>
                                         <h4 className="fw-weight-bold m-3 addTask">
-                                            <i className="fa fa-plus-circle pr-2"></i>New task
+                                            <i className="fa fa-plus-circle pr-2"></i>{strings.new_task}
                                         </h4>
                                     </div>
                                     <div className="row justify-content-start" onClick={() => this.sortByDate()}>
                                         <h4 className="fw-weight-bold m-3 sortDate">
-                                            <i className="fa fa-sort mx-1 pr-2"></i>Sort by date
+                                            <i className="fa fa-sort mx-1 pr-2"></i>{strings.sort_date}
                                         </h4>
                                     </div>
                                     <div className="row justify-content-start" onClick={() => this.sortByPriority()}>
                                         <h4 className="fw-weight-bold m-3 sortPriority">
-                                            <i className="fa fa-sort mx-1 pr-2"></i>Sort by priority
+                                            <i className="fa fa-sort mx-1 pr-2"></i>{strings.sort_priority}
                                         </h4>
                                     </div>
                                 </div>
@@ -495,7 +496,7 @@ export class Task extends React.Component {
                 <div className="tasks container">
                     <Modal size="lg" show={this.state.showHide} onEnter={() => { this.updateInput() }}>
                         <Modal.Header closeButton onClick={() => { this.handleModalShowHide(); }}>
-                            <Modal.Title>Updating</Modal.Title>
+                            <Modal.Title>{strings.updating}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <form className="form" onSubmit={(this.state.task && this.handleUpdateTask(this.state.task.id)) || this.handleSubmitTask}>
@@ -503,49 +504,49 @@ export class Task extends React.Component {
                                     <div className="col-8">
                                         <div className="task-input">
                                             <div className="form-group">
-                                                <label htmlFor="date">Date</label>
+                                                <label htmlFor="date">{strings.date}</label>
                                                 <input required={!this.state.task} type="date" min={tomorrow.toISOString().slice(0, 10)} name="date" id="date" placeholder="New date..." onChange={this.handleChangeTask} />
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="title">Title</label>
+                                                <label htmlFor="title">{strings.title}</label>
                                                 <input required={!this.state.task} type="text" name="title" id="title" placeholder="New title..." onChange={this.handleChangeTask} />
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="description">Description</label>
+                                                <label htmlFor="description">{strings.description}</label>
                                                 <textarea required={!this.state.task} type="text" name="description" id="description" cols="30" rows="10" placeholder="New description..." onChange={this.handleChangeTask} />
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="priority">Priority</label>
+                                                <label htmlFor="priority">{strings.priority}</label>
                                                 <select required={!this.state.task} id="priority" name="priority" onChange={this.handleChangeTask}>
-                                                    <option value="0">No priority</option>
-                                                    <option value="1">High priority</option>
-                                                    <option value="2">Medium priority</option>
-                                                    <option value="3">Low priority</option>
+                                                    <option value="0">{strings.no_priority}</option>
+                                                    <option value="1">{strings.high_priority}</option>
+                                                    <option value="2">{strings.medium_priority}</option>
+                                                    <option value="3">{strings.low_priority}</option>
                                                 </select>
                                             </div>
                                             {
                                                 this.props.user.premium &&
                                                 <div className="form-group">
-                                                    <label htmlFor="reminder">Reminder</label>
+                                                    <label htmlFor="reminder">{strings.reminder}</label>
                                                     <select required={!this.state.task} id="reminder" name="reminder" onChange={this.handleChangeTask}>
-                                                        <option value="0">No reminder</option>
-                                                        <option value="1">Warn three days before the end</option>
-                                                        <option value="2">Warn one day before the end</option>
-                                                        <option value="3">Warn three hours before the end</option>
-                                                        <option value="4">Warn one hour before the end</option>
+                                                        <option value="0">{strings.no_reminder}</option>
+                                                        <option value="1">{strings.td_reminder}</option>
+                                                        <option value="2">{strings.od_reminder}</option>
+                                                        <option value="3">{strings.th_reminder}</option>
+                                                        <option value="4">{strings.oh_reminder}</option>
                                                     </select>
                                                 </div>
                                             }
                                         </div>
                                     </div>
                                     <div className="col-4 text-right align-self-end">
-                                        <button type="submit" className="button mt-2">Submit</button>
+                                        <button type="submit" className="button mt-2">{strings.submit}</button>
                                     </div>
                                 </div>
                             </form>
                         </Modal.Body>
                     </Modal>
-                    {tasks.length ? tasks : <h2 className="text-gray text-center mt-5">No tasks</h2>}
+                    {tasks.length ? tasks : <h2 className="text-gray text-center mt-5">{strings.no_tasks}</h2>}
                 </div>
             </>
         );

@@ -3,6 +3,7 @@ import axios from 'axios';
 import API from '../../api/links';
 import { Modal } from "react-bootstrap";
 import clearInput from "./taskPage";
+import strings from "../../locale/locale"
 
 const headers = {
     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -184,7 +185,7 @@ export class Subtask extends React.Component {
             <>
                 <Modal show={this.state.showHideError}>
                     <Modal.Header closeButton onClick={() => this.handleModalShowHideError()}>
-                        <Modal.Title>Something wrong...</Modal.Title>
+                        <Modal.Title>{strings.wrong}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {this.state.errorMessage}
@@ -192,7 +193,7 @@ export class Subtask extends React.Component {
                 </Modal>
                 <Modal show={this.state.showHide} onEnter={() => { this.updateInput() }}>
                     <Modal.Header closeButton onClick={() => { this.handleModalShowHide(); }}>
-                        <Modal.Title>Updating</Modal.Title>
+                        <Modal.Title>{strings.updating}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <form className="form" onSubmit={this.state.subtask && this.handleUpdateSubtask(this.state.subtask.id)}>
@@ -206,13 +207,13 @@ export class Subtask extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col-5 text-right align-self-end">
-                                    <button type="submit" className="button mt-2">Submit</button>
+                                    <button type="submit" className="button mt-2">{strings.submit}</button>
                                 </div>
                             </div>
                         </form>
                     </Modal.Body>
                 </Modal>
-                <h4 className="subtask-header text-center mb-3">Subtasks</h4>
+                <h4 className="subtask-header text-center mb-3">{strings.subtasks}</h4>
                 {
                     subtasks.length
                         ?
@@ -224,19 +225,19 @@ export class Subtask extends React.Component {
                             </div>
                         </>
                         :
-                        <h2 className="text-gray text-center my-5">No subtasks</h2>
+                        <h2 className="text-gray text-center my-5">{strings.no_subtasks}</h2>
                 }
                 <form className="form" onSubmit={this.handleSubmitSubtask}>
                     <div className="row">
                         <div className="col-9">
                             <div className="extras-input">
                                 <div className="form-group">
-                                    <input required type="text" name="add_subtask" id="add_subtask" placeholder="New subtask..." onChange={this.handleChangeSubtask} />
+                                    <input required type="text" name="add_subtask" id="add_subtask" placeholder={strings.new_subtask} onChange={this.handleChangeSubtask} />
                                 </div>
                             </div>
                         </div>
                         <div className="col-3 text-right">
-                            <button type="submit" className="button mt-1">Submit</button>
+                            <button type="submit" className="button mt-1">{strings.submit}</button>
                         </div>
                     </div>
                 </form>
