@@ -8,7 +8,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 DEBUG = os.environ.get('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = ['127.0.0.1', '10.0.2.2', 'localhost', '.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', '10.0.2.2', 'localhost']
 
 INSTALLED_APPS = [
     'core.app',
