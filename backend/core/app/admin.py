@@ -3,6 +3,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 
+from import_export.admin import ImportExportMixin
+
 from .models import User, Task, Subtask, Tag, Extra
 
 
@@ -20,7 +22,7 @@ class UserCreationForm(forms.ModelForm):
 
 
 @admin.register(User)
-class UserAdmin(UserAdmin):
+class UserAdmin(ImportExportMixin, UserAdmin):
     add_form = UserCreationForm
     list_display = ('email', 'name',)
     ordering = ('email',)
@@ -40,7 +42,7 @@ class UserAdmin(UserAdmin):
 
 
 @admin.register(Task)
-class TaskAdmin(admin.ModelAdmin):
+class TaskAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ('date', 'owner', 'title', 'description', 'priority', 'reminder', 'done',)
     ordering = ('owner', 'date')
     search_fields = ('owner', 'title',)
@@ -51,7 +53,7 @@ class TaskAdmin(admin.ModelAdmin):
 
 
 @admin.register(Subtask)
-class SubtaskAdmin(admin.ModelAdmin):
+class SubtaskAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ('owner', 'task', 'title', 'done',)
     ordering = ('task__owner__email', 'task', 'title',)
     search_fields = ('task__owner__email', 'task', 'title',)
@@ -61,7 +63,7 @@ class SubtaskAdmin(admin.ModelAdmin):
 
 
 @admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ('owner', 'task', 'title',)
     ordering = ('task__owner__email', 'task', 'title',)
     search_fields = ('task__owner__email', 'task', 'title',)
@@ -71,7 +73,7 @@ class TagAdmin(admin.ModelAdmin):
 
 
 @admin.register(Extra)
-class ExtraAdmin(admin.ModelAdmin):
+class ExtraAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ('owner', 'task', 'information',)
     ordering = ('task__owner__email', 'task', 'information',)
     search_fields = ('task__owner__email', 'task', 'information',)
