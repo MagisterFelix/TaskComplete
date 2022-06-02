@@ -7,7 +7,8 @@ import { Subtask } from "./subtaskPage";
 import { Tag } from "./tagPage";
 import { Extra } from "./extraPage";
 import { Modal } from "react-bootstrap";
-import strings from "../../locale/locale"
+import strings from "../../locale/locale";
+import { toast } from 'react-toastify';
 
 const headers = {
     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -58,12 +59,112 @@ export class Task extends React.Component {
                 this._isMounted && this.setState({ tasks: response.data.data });
             })
             .catch(() => {
+                localStorage.removeItem('token');
                 window.location.href = '/login';
             })
     }
 
     componentWillUnmount() {
         this._isMounted = false;
+    }
+
+    addEvent(task) {
+        var priority = task.priority;
+        var reminder = task.reminder;
+
+        if (reminder === 1) {
+            reminder = 24 * 60 * 3;
+        } else if (reminder === 2) {
+            reminder = 24 * 60;
+        } else if (reminder === 3) {
+            reminder = 60 * 3;
+        } else if (reminder === 4) {
+            reminder = 60;
+        } else {
+            reminder = 0;
+        }
+
+        if (priority === 1) {
+            priority = 11;
+        } else if (priority === 2) {
+            priority = 5;
+        } else if (priority === 3) {
+            priority = 2;
+        } else {
+            priority = 8;
+        }
+
+        var event;
+
+        if (reminder) {
+            event = {
+                'summary': task.title,
+                'description': task.description,
+                'colorId': priority,
+                'start': {
+                    'date': task.date
+                },
+                'end': {
+                    'date': task.date
+                },
+                'reminders': {
+                    'useDefault': false,
+                    'overrides': [
+                        { 'method': 'email', 'minutes': reminder }
+                    ]
+                }
+            };
+        } else {
+            event = {
+                'summary': task.title,
+                'description': task.description,
+                'colorId': priority,
+                'start': {
+                    'date': task.date
+                },
+                'end': {
+                    'date': task.date
+                },
+                'reminders': {
+                    'useDefault': false
+                }
+            };
+        }
+
+        var request = this.gapi.client.calendar.events.insert({
+            'calendarId': 'primary',
+            'resource': event
+        });
+
+        request.execute();
+    }
+
+    addToCalendar(task) {
+        this.gapi.load('client:auth2', () => {
+
+            this.gapi.client.init({
+                apiKey: this.API_KEY,
+                clientId: this.CLIENT_ID,
+                discoveryDocs: this.DISCOVERY_DOCS,
+                scope: this.SCOPES,
+                plugin_name: 'taskcomplete'
+            });
+
+            this.gapi.client.load('calendar', 'v3');
+
+            let authInstance = this.gapi.auth2.getAuthInstance();
+            authInstance.then(() => {
+                if (authInstance.isSignedIn.get()) {
+                    this.addEvent(task);
+                } else {
+                    authInstance.signIn()
+                        .then((response) => {
+                            console.log(response);
+                            this.addEvent(task);
+                        })
+                }
+            });
+        });
     }
 
     updateEvents(body, prevTitle, prevDate) {
@@ -142,11 +243,12 @@ export class Task extends React.Component {
                 apiKey: this.API_KEY,
                 clientId: this.CLIENT_ID,
                 discoveryDocs: this.DISCOVERY_DOCS,
-                scope: this.SCOPES
+                scope: this.SCOPES,
+                immediate: false,
+                plugin_name: 'taskcomplete'
             });
 
             this.gapi.client.load('calendar', 'v3');
-
 
             if (this.gapi.auth2.getAuthInstance().isSignedIn.get()) {
                 this.updateEvents(body, prevTitle, prevDate);
@@ -200,7 +302,6 @@ export class Task extends React.Component {
             });
 
             this.gapi.client.load('calendar', 'v3');
-
 
             if (this.gapi.auth2.getAuthInstance().isSignedIn.get()) {
                 this.deleteEvents(id);
@@ -404,6 +505,7 @@ export class Task extends React.Component {
                     <div className="col-12 mx-auto">
                         <div className="row justify-content-between mx-5">
                             <div className="task_UD d-flex justify-content-center align-items-center mx-5 p-3">
+                                {this.props.user.premium && <i className="fa fa-calendar-plus-o fa-2x mr-3" onClick={() => this.addToCalendar(task)}></i>}
                                 <i className="fa fa-pencil fa-2x mr-2" onClick={() => this.handleModalShowHide(task)}></i>
                                 <i className="fa fa-trash fa-2x ml-2" onClick={() => this.delete(task.id)}></i>
                             </div>

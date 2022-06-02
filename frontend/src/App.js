@@ -11,6 +11,8 @@ import { NotFound } from "./components/404/404";
 import { Login } from "./components/auth/loginPage";
 import { Register } from "./components/auth/registerPage";
 import { Profile } from "./components/profile/profilePage";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class App extends React.Component {
   state = {
@@ -59,6 +61,11 @@ export default class App extends React.Component {
           <Route component={NotFound} />
         </Switch>
         <footer></footer>
+        <ToastContainer
+          position="top-left"
+          autoClose={2000}
+          style={{ marginTop: "5.5%" }}
+        />
       </Router >
     );
   }

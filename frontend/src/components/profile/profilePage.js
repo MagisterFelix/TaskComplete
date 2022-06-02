@@ -4,7 +4,7 @@ import axios from 'axios';
 import API from '../../api/links';
 import profileImage from './profile.svg';
 import GooglePayButton from '@google-pay/button-react';
-import strings from "../../locale/locale"
+import strings from "../../locale/locale";
 
 
 const headers = {
@@ -128,7 +128,7 @@ export class Profile extends React.Component {
                                             </div>
                                             :
                                             <div className="form-group mt-4">
-                                                <label htmlFor="premium"><i class="fa fa-star" style={{ 'color': '#F7D00E' }}></i> Premium <i class="fa fa-star" style={{ 'color': '#F7D00E' }}></i></label>
+                                                <label htmlFor="premium"><i className="fa fa-star" style={{ 'color': '#F7D00E' }}></i> Premium <i className="fa fa-star" style={{ 'color': '#F7D00E' }}></i></label>
                                             </div>
                                         }
                                     </div>

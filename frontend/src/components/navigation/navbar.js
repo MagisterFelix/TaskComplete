@@ -4,7 +4,7 @@ import axios from 'axios';
 import API from '../../api/links';
 import { Link } from 'react-router-dom';
 import './style.scss';
-import strings from "../../locale/locale"
+import strings from "../../locale/locale";
 
 const headers = {
     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -151,20 +151,24 @@ export class Navbar extends React.Component {
                 apiKey: this.API_KEY,
                 clientId: this.CLIENT_ID,
                 discoveryDocs: this.DISCOVERY_DOCS,
-                scope: this.SCOPES
-            })
+                scope: this.SCOPES,
+                plugin_name: 'taskcomplete'
+            });
 
             this.gapi.client.load('calendar', 'v3');
 
-            if (this.gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                this.sendEvents();
-            } else {
-                this.gapi.auth2.getAuthInstance().signIn()
-                    .then((response) => {
-                        console.log(response);
-                        this.sendEvents();
-                    })
-            }
+            let authInstance = this.gapi.auth2.getAuthInstance();
+            authInstance.then(() => {
+                if (authInstance.isSignedIn.get()) {
+                    this.sendEvents();
+                } else {
+                    authInstance.signIn()
+                        .then((response) => {
+                            console.log(response);
+                            this.sendEvents();
+                        })
+                }
+            });
         });
     }
 
@@ -186,7 +190,7 @@ export class Navbar extends React.Component {
                                 <img src={this.props.user.image} width="50" height="50" className="rounded-circle" alt="user_image" />
                             </div>
                             <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                {this.props.user.premium && <button className="dropdown-item" onClick={this.handleClick}>Add to Calendar</button>}
+                                {this.props.user.premium && <button className="dropdown-item" onClick={this.handleClick}>{strings.add_all_to_calendar}</button>}
                                 <Link to={'/profile'} className="dropdown-item">{strings.profile}</Link>
                                 <Link to={'/login'} className="dropdown-item" onClick={() => { localStorage.removeItem('token'); window.location.href = '/login' }}>{strings.logout}</Link>
                             </div>
