@@ -5,6 +5,7 @@ import API from '../../api/links';
 import { Link } from 'react-router-dom';
 import './style.scss';
 import strings from "../../locale/locale";
+import { toast } from 'react-toastify';
 
 const headers = {
     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -161,11 +162,12 @@ export class Navbar extends React.Component {
             authInstance.then(() => {
                 if (authInstance.isSignedIn.get()) {
                     this.sendEvents();
+                    toast.success(strings.notifications_success);
                 } else {
                     authInstance.signIn()
-                        .then((response) => {
-                            console.log(response);
+                        .then(() => {
                             this.sendEvents();
+                            toast.success(strings.notifications_success);
                         })
                 }
             });
@@ -174,7 +176,7 @@ export class Navbar extends React.Component {
 
     render() {
         return (
-            <nav className="navbar navbar-expand-sm shadow p-3 mb-5 bg-white w-100">
+            <nav className="navbar navbar-expand-sm fixed-top shadow p-3 mb-5 bg-white w-100">
                 <Link to={'/'} className="navbar-brand">
                     <img src={logo} width="50" height="50" alt="logo" />
                     <div className="logo">TaskComplete</div>

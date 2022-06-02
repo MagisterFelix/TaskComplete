@@ -54,7 +54,9 @@ const strings = new LocalizedStrings({
         no_tasks: "No tasks",
         no_subtasks: "No subtasks",
         no_extra: "No extra",
-        add_all_to_calendar: "Add all to calendar"
+        add_all_to_calendar: "Add all to calendar",
+        notifications_success: "Success",
+        notifications_failure: "Failure"
     },
     uk: {
         date: "Дата",
@@ -109,7 +111,9 @@ const strings = new LocalizedStrings({
         no_tasks: "Немає завдань",
         no_subtasks: "Немає підзавдань",
         no_extra: "Немає екстра",
-        add_all_to_calendar: "Додати все до календарю"
+        add_all_to_calendar: "Додати все до календарю",
+        notifications_success: "Успіх",
+        notifications_failure: "Невдача"
     },
     ru: {
         date: "Дата",
@@ -164,7 +168,9 @@ const strings = new LocalizedStrings({
         no_tasks: "Нет задач",
         no_subtasks: "Нет подзадач",
         no_extra: "Нет экстра",
-        add_all_to_calendar: "Добавить все в календарь"
+        add_all_to_calendar: "Добавить все в календарь",
+        notifications_success: "Успех",
+        notifications_failure: "Неудача"
     }
 });
 

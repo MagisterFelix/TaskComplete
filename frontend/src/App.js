@@ -60,12 +60,12 @@ export default class App extends React.Component {
           <Route exact path='/profile' component={() => <Profile user={this.state.user} />} />
           <Route component={NotFound} />
         </Switch>
-        <footer></footer>
         <ToastContainer
           position="top-left"
           autoClose={2000}
           style={{ marginTop: "5.5%" }}
         />
+        <footer></footer>
       </Router >
     );
   }

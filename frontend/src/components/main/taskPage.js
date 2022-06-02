@@ -156,11 +156,12 @@ export class Task extends React.Component {
             authInstance.then(() => {
                 if (authInstance.isSignedIn.get()) {
                     this.addEvent(task);
+                    toast.success(strings.notifications_success);
                 } else {
                     authInstance.signIn()
-                        .then((response) => {
-                            console.log(response);
+                        .then(() => {
                             this.addEvent(task);
+                            toast.success(strings.notifications_success);
                         })
                 }
             });
@@ -250,14 +251,17 @@ export class Task extends React.Component {
 
             this.gapi.client.load('calendar', 'v3');
 
-            if (this.gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                this.updateEvents(body, prevTitle, prevDate);
-            } else {
-                this.gapi.auth2.getAuthInstance().signIn()
-                    .then(() => {
-                        this.updateEvents(body, prevTitle, prevDate);
-                    })
-            }
+            let authInstance = this.gapi.auth2.getAuthInstance();
+            authInstance.then(() => {
+                if (authInstance.isSignedIn.get()) {
+                    this.updateEvents(body, prevTitle, prevDate);
+                } else {
+                    authInstance.signIn()
+                        .then(() => {
+                            this.updateEvents(body, prevTitle, prevDate);
+                        })
+                }
+            });
         });
     }
 
@@ -303,20 +307,23 @@ export class Task extends React.Component {
 
             this.gapi.client.load('calendar', 'v3');
 
-            if (this.gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                this.deleteEvents(id);
-            } else {
-                this.gapi.auth2.getAuthInstance().signIn()
-                    .then(() => {
-                        this.deleteEvents(id);
-                    })
-            }
+            let authInstance = this.gapi.auth2.getAuthInstance();
+            authInstance.then(() => {
+                if (authInstance.isSignedIn.get()) {
+                    this.deleteEvents(id);
+                } else {
+                    authInstance.signIn()
+                        .then(() => {
+                            this.deleteEvents(id);;
+                        })
+                }
+            });
         });
     }
 
     handleDone(index, id) {
         let done = document.getElementById('done' + index);
-        done.className = 'fa fa-check-square-o fa-3x done';
+        done.className = 'fa fa-check-square-o fa-3x done mr-1';
         const body = {
             done: true
         };
