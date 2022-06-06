@@ -44,7 +44,8 @@ const Mircophone = ({ onPostTask, onPutTask, onDeleteTask, onAddToCalendar, onDo
         {
             command: strings.command_add_all_tasks_to_calendar,
             callback: () => onAddToCalendar(),
-            isFuzzyMatch: true
+            isFuzzyMatch: true,
+            fuzzyMatchingThreshold: 0.7
         },
         {
             command: [strings.command_done_task_1, strings.command_done_task_2],
