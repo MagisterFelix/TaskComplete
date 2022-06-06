@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./style.scss";
 import axios from 'axios';
 import API from '../../api/links';
@@ -9,12 +9,71 @@ import { Extra } from "./extraPage";
 import { Modal } from "react-bootstrap";
 import strings from "../../locale/locale";
 import { toast } from 'react-toastify';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 const headers = {
     'Authorization': 'Bearer ' + localStorage.getItem('token'),
     'Accept': 'application/json',
     'Content-Type': 'application/json'
 };
+
+const languages = {
+    'en': 'en-US',
+    'uk': 'uk-UA',
+    'ru': 'ru-RU'
+}
+
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+const Mircophone = ({ onPostTask, onPutTask, onDeleteTask, onAddToCalendar, onDoneTask, onTranscriptChange }) => {
+    const commands = [
+        {
+            command: [strings.command_create_task_1, strings.command_create_task_2, strings.command_create_task_3],
+            callback: (title, date) => onPostTask(title, date)
+        },
+        {
+            command: [strings.command_update_task_1, strings.command_update_task_2, strings.command_update_task_3],
+            callback: (oldTitle, newTitle) => onPutTask(oldTitle, newTitle),
+        },
+        {
+            command: [strings.command_delete_task_1, strings.command_delete_task_2],
+            callback: (title) => onDeleteTask(title)
+        },
+        {
+            command: strings.command_add_all_tasks_to_calendar,
+            callback: () => onAddToCalendar(),
+            isFuzzyMatch: true
+        },
+        {
+            command: [strings.command_done_task_1, strings.command_done_task_2],
+            callback: (title) => onDoneTask(title)
+        },
+    ]
+    const { transcript, listening, resetTranscript } = useSpeechRecognition({ commands });
+
+    useEffect(() => {
+        onTranscriptChange(transcript);
+    }, [transcript]);
+
+    if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
+        return alert("Browser doesn't support speech recognition.");
+    }
+
+    return (
+        <>
+            {
+                listening ?
+                    <div className="microphone mic-enabled" id="microphone"
+                        onClick={() => { SpeechRecognition.stopListening(); resetTranscript() }}><i className="fa fa-microphone"></i></div>
+                    :
+                    <div className="microphone mic-disabled" id="microphone"
+                        onClick={() => SpeechRecognition.startListening({ language: languages[navigator.language] })}><i className="fa fa-microphone"></i></div>
+            }
+        </>
+    )
+}
 
 export default function clearInput() {
     let inputs = document.getElementsByTagName('input');
@@ -32,17 +91,24 @@ export class Task extends React.Component {
             tasks: null,
             task: null,
             date: null,
-            title: null,
-            description: null,
+            title: '',
+            description: '',
             priority: 0,
             reminder: 0,
             sortDate: 0,
             sortPriority: 0,
             showHideError: false,
-            errorMessage: null
+            errorMessage: null,
+            command: ''
         }
 
         this._isMounted = false;
+        this.onGetCommand = this.onGetCommand.bind(this);
+        this.postTask = this.postTask.bind(this);
+        this.putTask = this.putTask.bind(this);
+        this.deleteTask = this.deleteTask.bind(this);
+        this.addAllToCalendar = this.addAllToCalendar.bind(this);
+        this.doneTask = this.doneTask.bind(this);
     }
 
     gapi = window.gapi;
@@ -58,14 +124,256 @@ export class Task extends React.Component {
             .then(response => {
                 this._isMounted && this.setState({ tasks: response.data.data });
             })
-            .catch(() => {
-                localStorage.removeItem('token');
-                window.location.href = '/login';
+            .catch((response) => {
+                if (JSON.parse(JSON.stringify(response)).status === 401) {
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                }
             })
     }
 
     componentWillUnmount() {
         this._isMounted = false;
+    }
+
+    onGetCommand(command) {
+        this.setState({ command });
+    }
+
+    postTask(title, date) {
+        let newDate;
+        if (!date || date === strings.tomorrow) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            newDate = tomorrow.toISOString().slice(0, 10);
+        } else {
+            const preDate = date.includes('.') ? date.split('.') : date.split(' ');
+            newDate = new Date(new Date().getFullYear(), parseInt(preDate[1]) - 1, parseInt(preDate[0]) + 1);
+            newDate = newDate.toISOString().slice(0, 10)
+        }
+
+        const body = {
+            date: newDate,
+            title: capitalize(title),
+            description: '',
+            priority: 0,
+            reminder: 0
+        };
+
+        axios.post(API.tasks, body, { headers })
+            .then(() => {
+                axios.get(API.tasks, { headers })
+                    .then(response => {
+                        this._isMounted && this.setState({ tasks: response.data.data });
+                        toast.success(strings.notifications_success);
+                    });
+            })
+            .catch(error => {
+                error = error.response.data.message;
+                if (error.includes("set")) {
+                    error = "This task is already exists.";
+                }
+                this.setState({ errorMessage: error });
+                this.handleModalShowHideError();
+                toast.error(strings.notifications_failure);
+            });
+    }
+
+    putTask(oldTitle, newTitle) {
+        for (const task of this.state.tasks) {
+            if (task.title.toLowerCase() === oldTitle.toLowerCase()) {
+                const body = {
+                    date: task.date,
+                    title: capitalize(newTitle),
+                    description: task.description,
+                    priority: task.priority,
+                    reminder: task.reminder
+                };
+
+                axios.put(API.task.replace('task_id', task.id), body, { headers })
+                    .then(() => {
+                        axios.get(API.tasks, { headers })
+                            .then(response => {
+                                this._isMounted && this.setState({ tasks: response.data.data });
+                                toast.success(strings.notifications_success);
+                            });
+                    })
+                    .catch(error => {
+                        error = error.response.data.message;
+                        if (error.includes("set")) {
+                            error = "This task is already exists.";
+                        }
+                        this.setState({ errorMessage: error });
+                        this.handleModalShowHideError();
+                        toast.error(strings.notifications_failure);
+                    });
+                break;
+            }
+        }
+    }
+
+    deleteTask(title) {
+        for (const task of this.state.tasks) {
+            if (task.title.toLowerCase() === title.toLowerCase()) {
+                axios.delete(API.task.replace('task_id', task.id), { headers })
+                    .then(() => {
+                        axios.get(API.tasks, { headers })
+                            .then(response => {
+                                this._isMounted && this.setState({ tasks: response.data.data });
+                                toast.success(strings.notifications_success);
+                            });
+                    });
+                break;
+            }
+        }
+    }
+
+    doneTask(title) {
+        let tasks = document.getElementsByClassName('done');
+        for (const task of tasks) {
+            if (task.parentElement.children[1].firstChild.textContent.toLowerCase() === title.toLowerCase()) {
+                task.parentElement.children[0].className = 'fa fa-check-square-o fa-3x done mr-1';
+            }
+        }
+        for (const task of this.state.tasks) {
+            if (task.title.toLowerCase() === title.toLowerCase()) {
+                const body = {
+                    done: true
+                };
+                axios.put(API.task.replace('task_id', task.id), body, { headers });
+                break;
+            }
+        }
+    }
+
+    sendEvents() {
+        axios.get(API.tasks, { headers })
+            .then(response => {
+                this.setState({ tasks: response.data.data });
+            });
+
+        let sorted = this.state.tasks.sort(function (a, b) {
+            var date1 = (new Date(a.date));
+            var date2 = (new Date(b.date));
+            return date1 - date2;
+        });
+
+        let min_date = new Date(sorted[0].date);
+        min_date.setDate(min_date.getDate() - 1);
+
+        this.gapi.client.calendar.events.list({
+            'calendarId': 'primary',
+            "singleEvents": true,
+            "orderBy": "startTime",
+            "timeMin": min_date.toISOString(),
+        }).execute((response) => {
+            const filtered = this.state.tasks.filter((task) => {
+                return response.items.every((item) => {
+                    return item.summary !== task.title;
+                });
+            });
+
+            for (const task of filtered) {
+
+                var priority = task.priority;
+                var reminder = task.reminder;
+
+                if (reminder === 1) {
+                    reminder = 24 * 60 * 3;
+                } else if (reminder === 2) {
+                    reminder = 24 * 60;
+                } else if (reminder === 3) {
+                    reminder = 60 * 3;
+                } else if (reminder === 4) {
+                    reminder = 60;
+                } else {
+                    reminder = 0;
+                }
+
+                if (priority === 1) {
+                    priority = 11;
+                } else if (priority === 2) {
+                    priority = 5;
+                } else if (priority === 3) {
+                    priority = 2;
+                } else {
+                    priority = 8;
+                }
+
+                var event;
+
+                if (reminder) {
+                    event = {
+                        'summary': task.title,
+                        'description': task.description,
+                        'colorId': priority,
+                        'start': {
+                            'date': task.date
+                        },
+                        'end': {
+                            'date': task.date
+                        },
+                        'reminders': {
+                            'useDefault': false,
+                            'overrides': [
+                                { 'method': 'email', 'minutes': reminder }
+                            ]
+                        }
+                    };
+                } else {
+                    event = {
+                        'summary': task.title,
+                        'description': task.description,
+                        'colorId': priority,
+                        'start': {
+                            'date': task.date
+                        },
+                        'end': {
+                            'date': task.date
+                        },
+                        'reminders': {
+                            'useDefault': false
+                        }
+                    };
+                }
+
+                var request = this.gapi.client.calendar.events.insert({
+                    'calendarId': 'primary',
+                    'resource': event
+                });
+
+                request.execute();
+            }
+        });
+    }
+
+    addAllToCalendar() {
+        this.gapi.load('client:auth2', () => {
+
+            this.gapi.client.init({
+                apiKey: this.API_KEY,
+                clientId: this.CLIENT_ID,
+                discoveryDocs: this.DISCOVERY_DOCS,
+                scope: this.SCOPES,
+                plugin_name: 'taskcomplete'
+            });
+
+            this.gapi.client.load('calendar', 'v3');
+
+            let authInstance = this.gapi.auth2.getAuthInstance();
+            authInstance.then(() => {
+                if (authInstance.isSignedIn.get()) {
+                    this.sendEvents();
+                    toast.success(strings.notifications_success);
+                } else {
+                    authInstance.signIn()
+                        .then(() => {
+                            this.sendEvents();
+                            toast.success(strings.notifications_success);
+                        })
+                }
+            });
+        });
     }
 
     addEvent(task) {
@@ -302,7 +610,8 @@ export class Task extends React.Component {
                 apiKey: this.API_KEY,
                 clientId: this.CLIENT_ID,
                 discoveryDocs: this.DISCOVERY_DOCS,
-                scope: this.SCOPES
+                scope: this.SCOPES,
+                plugin_name: 'taskcomplete'
             });
 
             this.gapi.client.load('calendar', 'v3');
@@ -385,6 +694,10 @@ export class Task extends React.Component {
                 axios.get(API.tasks, { headers })
                     .then(response => {
                         this._isMounted && this.setState({ tasks: response.data.data });
+
+                        if (this.props.user.premium && body.reminder) {
+                            this.addToCalendar(this.state.tasks[this.state.tasks.length - 1]);
+                        }
                     });
             })
             .catch(error => {
@@ -604,9 +917,7 @@ export class Task extends React.Component {
                 </div>
                 <div className="tasks container">
                     <Modal size="lg" show={this.state.showHide} onEnter={() => { this.updateInput() }}>
-                        <Modal.Header closeButton onClick={() => { this.handleModalShowHide(); }}>
-                            <Modal.Title>{strings.updating}</Modal.Title>
-                        </Modal.Header>
+                        <Modal.Header closeButton onClick={() => { this.handleModalShowHide(); }}></Modal.Header>
                         <Modal.Body>
                             <form className="form" onSubmit={(this.state.task && this.handleUpdateTask(this.state.task.id)) || this.handleSubmitTask}>
                                 <div className="row">
@@ -622,7 +933,7 @@ export class Task extends React.Component {
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="description">{strings.description}</label>
-                                                <textarea required={!this.state.task} type="text" name="description" id="description" cols="30" rows="10" placeholder="New description..." onChange={this.handleChangeTask} />
+                                                <textarea type="text" name="description" id="description" cols="30" rows="10" placeholder="New description..." onChange={this.handleChangeTask} />
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="priority">{strings.priority}</label>
@@ -657,6 +968,13 @@ export class Task extends React.Component {
                     </Modal>
                     {tasks.length ? tasks : <h2 className="text-gray text-center mt-5">{strings.no_tasks}</h2>}
                 </div>
+                {this.props.user.premium && <Mircophone
+                    onPostTask={this.postTask}
+                    onPutTask={this.putTask}
+                    onDeleteTask={this.deleteTask}
+                    onAddToCalendar={this.addAllToCalendar}
+                    onDoneTask={this.doneTask}
+                    onTranscriptChange={this.onGetCommand} />}
             </>
         );
     }

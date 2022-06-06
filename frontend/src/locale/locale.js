@@ -56,7 +56,19 @@ const strings = new LocalizedStrings({
         no_extra: "No extra",
         add_all_to_calendar: "Add all to calendar",
         notifications_success: "Success",
-        notifications_failure: "Failure"
+        notifications_failure: "Failure",
+        tomorrow: "tomorrow",
+        command_create_task_1: "create (the) (a) task (to) * (on *)",
+        command_create_task_2: "make (the) (a) task (to) * (on *)",
+        command_create_task_3: "add (the) (a) task (to) * (on *)",
+        command_update_task_1: "change (the) (a) task * (to) *",
+        command_update_task_2: "edit (the) (a) task * (to) *",
+        command_update_task_3: "update (the) (a) task * (to) *",
+        command_delete_task_1: "delete (the) (a) task (to) *",
+        command_delete_task_2: "remove (the) (a) task (to) *",
+        command_add_all_tasks_to_calendar: "(add) (all) tasks to (the) (a) calendar",
+        command_done_task_1: "compete (the) (a) task (to) *",
+        command_done_task_2: "check (the) (a) task (to) *"
     },
     uk: {
         date: "Дата",
@@ -113,7 +125,19 @@ const strings = new LocalizedStrings({
         no_extra: "Немає екстра",
         add_all_to_calendar: "Додати все до календарю",
         notifications_success: "Успіх",
-        notifications_failure: "Невдача"
+        notifications_failure: "Невдача",
+        tomorrow: "завтра",
+        command_create_task_1: "створи завдання * (на *)",
+        command_create_task_2: "зроби завдання * (на *)",
+        command_create_task_3: "додай завдання * (на *)",
+        command_update_task_1: "зміни завдання * на *",
+        command_update_task_2: "поміняй завдання * на *",
+        command_update_task_3: "онови завдання * на *",
+        command_delete_task_1: "видали завдання *",
+        command_delete_task_2: "прибери завдання *",
+        command_add_all_tasks_to_calendar: "(додай) (усі) завдання до календарю",
+        command_done_task_1: "виконай завдання *",
+        command_done_task_2: "відміть завдання *"
     },
     ru: {
         date: "Дата",
@@ -170,7 +194,19 @@ const strings = new LocalizedStrings({
         no_extra: "Нет экстра",
         add_all_to_calendar: "Добавить все в календарь",
         notifications_success: "Успех",
-        notifications_failure: "Неудача"
+        notifications_failure: "Неудача",
+        tomorrow: "завтра",
+        command_create_task_1: "создай задачу * (на *)",
+        command_create_task_2: "сделай задачу * (на *)",
+        command_create_task_3: "добавь задачу * (на *)",
+        command_update_task_1: "измени задачу * на *",
+        command_update_task_2: "поменяй задачу * на *",
+        command_update_task_3: "обнови задачу * на *",
+        command_delete_task_1: "удали задачу *",
+        command_delete_task_2: "убери задачу *",
+        command_add_all_tasks_to_calendar: "(добавь) (все) задачи в календарь",
+        command_done_task_1: "выполни задачу *",
+        command_done_task_2: "отметь задачу *"
     }
 });
 

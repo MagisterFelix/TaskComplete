@@ -63,7 +63,7 @@ export class Navbar extends React.Component {
             'calendarId': 'primary',
             "singleEvents": true,
             "orderBy": "startTime",
-            "timeMin": min_date.toISOString()
+            "timeMin": min_date.toISOString(),
         }).execute((response) => {
             const filtered = this.state.tasks.filter((task) => {
                 return response.items.every((item) => {
@@ -174,6 +174,26 @@ export class Navbar extends React.Component {
         });
     }
 
+    logout() {
+        this.gapi.load('client:auth2', () => {
+
+            this.gapi.client.init({
+                apiKey: this.API_KEY,
+                clientId: this.CLIENT_ID,
+                discoveryDocs: this.DISCOVERY_DOCS,
+                scope: this.SCOPES,
+                plugin_name: 'taskcomplete'
+            });
+
+            let authInstance = this.gapi.auth2.getAuthInstance();
+            authInstance.then(() => {
+                if (authInstance.isSignedIn.get()) {
+                    authInstance.signOut()
+                }
+            });
+        });
+    }
+
     render() {
         return (
             <nav className="navbar navbar-expand-sm fixed-top shadow p-3 mb-5 bg-white w-100">
@@ -194,7 +214,7 @@ export class Navbar extends React.Component {
                             <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 {this.props.user.premium && <button className="dropdown-item" onClick={this.handleClick}>{strings.add_all_to_calendar}</button>}
                                 <Link to={'/profile'} className="dropdown-item">{strings.profile}</Link>
-                                <Link to={'/login'} className="dropdown-item" onClick={() => { localStorage.removeItem('token'); window.location.href = '/login' }}>{strings.logout}</Link>
+                                <Link to={'/login'} className="dropdown-item" onClick={() => { localStorage.removeItem('token'); window.location.href = '/login'; this.logout(); }}>{strings.logout}</Link>
                             </div>
                         </li>
                     </ul>

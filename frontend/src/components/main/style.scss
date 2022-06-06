@@ -1,3 +1,65 @@
+.microphone {
+    cursor: pointer;
+    position: fixed;
+    background: #fff;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
+    width: 64px;
+    height: 64px;
+    text-align: center;
+    line-height: 2;
+    font-size: 30px;
+    border-radius: 50%;
+    right: 50px;
+    bottom: 50px;
+    transition: background 0.5s;
+    z-index: 11;
+}
+
+.microphone:hover {
+    background: #f0f0f0;
+    color: rgb(194, 194, 194);
+}
+
+.microphone:active {
+    background: #dddddd;
+    color: rgb(194, 194, 194);
+}
+
+.microphone i {
+    padding-top: 12px;
+    color: rgba(0, 0, 0, .8);
+}
+
+.mic-disbled {
+    animation: none;
+    color: rgba(0, 0, 0, .8);
+}
+
+.mic-enabled {
+    animation: pulse ease-in-out 1s infinite;
+
+    & i {
+        color: red;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: translateZ(0.95);
+        box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    50% {
+        transform: translateZ(1);
+        box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.4);
+    }
+
+    100% {
+        transform: translateZ(0.95);
+        box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
+    }
+}
+
 .sideBox {
     position: absolute;
     top: 13.5em;
