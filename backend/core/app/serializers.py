@@ -71,9 +71,9 @@ class TaskSerializer(serializers.ModelSerializer):
         if data.get('done') is None:
             errors = {}
             if data.get('date') is None:
-                errors['date'] = 'This field is required.'
+                errors['date'] = 'Date field is required.'
             if data.get('title') is None:
-                errors['title'] = 'This field is required.'
+                errors['title'] = 'Title field is required.'
             if errors:
                 raise serializers.ValidationError(errors)
         return data
@@ -92,7 +92,7 @@ class SubtaskSerializer(serializers.ModelSerializer):
         if data.get('done') is None:
             errors = {}
             if data.get('title') is None:
-                errors['title'] = 'This field is required.'
+                errors['title'] = 'Title field is required.'
             if errors:
                 raise serializers.ValidationError(errors)
         return data
