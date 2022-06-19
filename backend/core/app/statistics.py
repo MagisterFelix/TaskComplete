@@ -66,6 +66,7 @@ class Statistics:
 
     def get_data(self):
         data = {
+            'active_tasks': self.get_active_tasks().values(),
             'active': self.get_active_tasks().count(),
             'done': self.get_done_tasks().count(),
             'missed': self.get_missed_tasks().count(),
