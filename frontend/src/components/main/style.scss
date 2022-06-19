@@ -92,6 +92,14 @@
     }
 }
 
+.task_done {
+    opacity: 0.5;
+}
+
+.task {
+    opacity: 1;
+}
+
 .tasks {
 
     .priority {
@@ -120,7 +128,7 @@
             position: relative;
             height: 5em;
 
-            .done {
+            .square {
                 cursor: pointer;
             }
 
