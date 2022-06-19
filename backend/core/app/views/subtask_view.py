@@ -17,7 +17,7 @@ class SubtaskView(APIView):
         task = Task.objects.filter(owner=request.user.id, id=task_primary_key)
 
         if task.exists():
-            subtasks = Subtask.objects.filter(task=task_primary_key)
+            subtasks = Subtask.objects.filter(task=task_primary_key).order_by('done')
 
             if primary_key is None:
                 data = subtasks.values()

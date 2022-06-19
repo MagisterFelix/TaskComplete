@@ -1,3 +1,5 @@
+from django.utils.timezone import now, timedelta
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,7 +17,8 @@ class TaskView(APIView):
 
     def get(self, request, primary_key=None):
         if primary_key is None:
-            data = Task.objects.filter(owner=request.user.id).values()
+            Task.objects.filter(owner=request.user.id, date__lt=(now() - timedelta(days=15)).date()).delete()
+            data = Task.objects.filter(owner=request.user.id).order_by('done', 'date').values()
             success = True
             status_code = status.HTTP_200_OK
             message = 'Tasks received successfully.'
@@ -80,7 +83,6 @@ class TaskView(APIView):
 
                 if serializer.is_valid():
                     if serializer.validated_data.get('done'):
-                        task.delete()
                         success = True
                         status_code = status.HTTP_200_OK
                         message = 'Task completed successfully.'
