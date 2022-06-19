@@ -94,7 +94,7 @@ const strings = new LocalizedStrings({
         new_extra: "Нова інформація...",
         sort_date: "За датою",
         sort_priority: "За пріорітетом",
-        submit: "Відправити",
+        submit: "Надіслати",
         profile: "Профіль",
         logout: "Вийти",
         updating: "Оновлення",
