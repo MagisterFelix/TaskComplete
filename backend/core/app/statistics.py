@@ -13,7 +13,7 @@ class Statistics:
         start_day = (now() - timedelta(days=DAYS_COUNT_FROM_TODAY)).date()
         end_day = (now() + timedelta(days=DAYS_COUNT_FROM_TODAY)).date()
         self._tasks = Task.objects.filter(owner=owner, date__range=[start_day, end_day]).order_by('date')
-        self._consecutive_days = []
+        self._tired_days = []
         self.calculate_tired_days()
 
     @property
@@ -21,8 +21,8 @@ class Statistics:
         return self._tasks
 
     @property
-    def consecutive_days(self):
-        return self._consecutive_days
+    def tired_days(self):
+        return self._tired_days
 
     def get_active_tasks(self):
         return self.tasks.filter(date__gte=self._today, done=False)
@@ -45,24 +45,25 @@ class Statistics:
 
         for value in range(DAYS_COUNT_FROM_TODAY + 1):
             date = (now() + timedelta(days=value)).date()
-            active_task = active_tasks.filter(date=date)
+            active_tasks_by_date = active_tasks.filter(date=date)
 
-            if active_task.exists():
-                if current_index == len(self.consecutive_days):
-                    self.consecutive_days.append([])
-                self.consecutive_days[current_index].append(active_task.first().date)
+            if active_tasks_by_date.exists():
+                if current_index == len(self._tired_days):
+                    self._tired_days.append([])
+                for active_task_by_date in active_tasks_by_date:
+                    self._tired_days[current_index].append(active_task_by_date.date)
             else:
-                current_index += current_index != len(self.consecutive_days)
+                current_index += current_index != len(self._tired_days)
 
     @property
     def is_get_tired(self):
-        return any((len(days) > 2 for days in self.consecutive_days))
+        return any((len(days) > 2 for days in self._tired_days))
 
     def get_tired_days_range(self):
         if not self.is_get_tired:
             return None
 
-        return [(days[0], days[-1]) for days in self.consecutive_days if len(days) > 2]
+        return [(days[0], days[-1]) for days in self._tired_days if len(days) > 2]
 
     def get_data(self):
         data = {
@@ -75,8 +76,7 @@ class Statistics:
             'fatigue': {
                 'is_get_tired': self.is_get_tired,
                 'tired_days_range': self.get_tired_days_range()
-            },
-            'consecutive_days': self.consecutive_days
+            }
         }
 
         return data
