@@ -58,6 +58,8 @@ const Mircophone = ({ onPostTask, onPutTask, onDeleteTask, onAddToCalendar, onDo
         onTranscriptChange(transcript);
     }, [transcript]);
 
+    console.log(transcript)
+
     if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
         return alert("Browser doesn't support speech recognition.");
     }

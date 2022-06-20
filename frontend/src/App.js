@@ -11,6 +11,7 @@ import { NotFound } from "./components/404/404";
 import { Login } from "./components/auth/loginPage";
 import { Register } from "./components/auth/registerPage";
 import { Profile } from "./components/profile/profilePage";
+import { Statistics } from "./components/statistics/statisticsPage"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -58,6 +59,7 @@ export default class App extends React.Component {
           <Route exact path='/login' component={Login} />
           <Route exact path='/register' component={Register} />
           <Route exact path='/profile' component={() => <Profile user={this.state.user} />} />
+          <Route exact path='/statistics' component={() => <Statistics user={this.state.user} />} />
           <Route component={NotFound} />
         </Switch>
         <ToastContainer

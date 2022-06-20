@@ -214,7 +214,8 @@ export class Navbar extends React.Component {
                             <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 {this.props.user.premium && <button className="dropdown-item" onClick={this.handleClick}>{strings.add_all_to_calendar}</button>}
                                 <Link to={'/profile'} className="dropdown-item">{strings.profile}</Link>
-                                <Link to={'/login'} className="dropdown-item" onClick={() => { localStorage.removeItem('token'); window.location.href = '/login'; this.logout(); }}>{strings.logout}</Link>
+                                <Link to={'/statistics'} className="dropdown-item">{strings.statistics}</Link>
+                                <Link to={'/login'} className="dropdown-item" onClick={() => { this.logout(); localStorage.removeItem('token'); window.location.href = '/login'; }}>{strings.logout}</Link>
                             </div>
                         </li>
                     </ul>
