@@ -631,16 +631,30 @@ export class Task extends React.Component {
         });
     }
 
-    handleDone(index, id) {
+    handleDone(index, task) {
         let done = document.getElementById('done' + index);
-        done.className = 'fa fa-check-square-o fa-3x done mr-1';
         const body = {
-            done: true
+            done: !task.done
         };
-        if (this.props.user.premium) {
-            this.removeFromCalendar(id);
+        if (!task.done) {
+            done.className = 'fa fa-check-square-o fa-3x square mr-1';
+            if (this.props.user.premium) {
+                this.removeFromCalendar(task.id);
+            }
+        } else {
+            done.className = 'fa fa-square-o fa-3x square mr-1';
+            if (this.props.user.premium) {
+                this.addToCalendar(task);
+            }
         }
-        axios.put(API.task.replace('task_id', id), body, { headers });
+        axios.put(API.task.replace('task_id', task.id), body, { headers })
+            .then(() => {
+                axios.get(API.tasks, { headers })
+                    .then(response => {
+                        this._isMounted && this.setState({ tasks: response.data.data });
+                        done.className = 'fa fa-square-o fa-3x square mr-1';
+                    });
+            });
     }
 
     delete(id) {
@@ -794,7 +808,7 @@ export class Task extends React.Component {
         const months = [strings.january, strings.february, strings.march, strings.april, strings.may, strings.june, strings.july, strings.august, strings.september, strings.october, strings.november, strings.december];
 
         let tasks = [];
-        let sorted_tasks = this.state.tasks.sort((a, b) => a.id - b.id);
+        let sorted_tasks = this.state.tasks;
 
         if (this.state.sortPriority === 1) {
             sorted_tasks = this.state.tasks.sort((a, b) => b.priority - a.priority);
@@ -822,7 +836,7 @@ export class Task extends React.Component {
             }
 
             tasks.push(
-                <div key={task_index} className="row mt-5">
+                <div key={task_index} className={"task" + (task.done ? "_done" : "") + " row mt-5"}>
                     <div className="col-12 mx-auto">
                         <div className="row justify-content-between mx-5">
                             <div className="task_UD d-flex justify-content-center align-items-center mx-5 p-3">
@@ -843,7 +857,12 @@ export class Task extends React.Component {
                                 <div className="header row border-bottom mb-4">
                                     <div className="col-9">
                                         <div className="d-flex mb-5 pb-5 align-items-center" onMouseOver={() => this.over(task.id)} onMouseOut={() => this.out(task.id)}>
-                                            <i className="fa fa-square-o fa-3x done mr-1" id={"done" + task_index} onClick={() => this.handleDone(task_index, task.id)}></i>
+                                            {
+                                                task.done ?
+                                                    <i className="fa fa-check-square-o fa-3x square mr-1" id={"done" + task_index} onClick={() => this.handleDone(task_index, task)}></i>
+                                                    :
+                                                    <i className="fa fa-square-o fa-3x square mr-1" id={"done" + task_index} onClick={() => this.handleDone(task_index, task)}></i>
+                                            }
                                             <div className="ms-3">
                                                 <h4 className="fw-weight-bold mb-0 pl-1">{task.title}</h4>
                                             </div>
