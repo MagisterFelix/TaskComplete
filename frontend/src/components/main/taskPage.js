@@ -232,18 +232,19 @@ export class Task extends React.Component {
     }
 
     doneTask(title) {
-        let tasks = document.getElementsByClassName('done');
-        for (const task of tasks) {
-            if (task.parentElement.children[1].firstChild.textContent.toLowerCase() === title.toLowerCase()) {
-                task.parentElement.children[0].className = 'fa fa-check-square-o fa-3x done mr-1';
-            }
-        }
         for (const task of this.state.tasks) {
             if (task.title.toLowerCase() === title.toLowerCase()) {
                 const body = {
                     done: true
                 };
-                axios.put(API.task.replace('task_id', task.id), body, { headers });
+                axios.put(API.task.replace('task_id', task.id), body, { headers })
+                    .then(() => {
+                        axios.get(API.tasks, { headers })
+                            .then(response => {
+                                this._isMounted && this.setState({ tasks: response.data.data });
+                                toast.success(strings.notifications_success);
+                            });
+                    });
                 break;
             }
         }
