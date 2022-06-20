@@ -3,7 +3,7 @@ from django.utils.timezone import now, timedelta
 from core.app.models import Task
 
 
-DAYS_COUNT_FROM_TODAY = 15
+DAYS_COUNT_FROM_TODAY = 16
 
 
 class Statistics:
@@ -34,7 +34,7 @@ class Statistics:
         return self.tasks.filter(date__lt=self._today, done=False)
 
     def get_free_days(self):
-        return DAYS_COUNT_FROM_TODAY - self.get_active_tasks().count()
+        return DAYS_COUNT_FROM_TODAY - self.get_active_tasks().distinct('date').count()
 
     def get_busy_days(self):
         return DAYS_COUNT_FROM_TODAY - self.get_free_days()
