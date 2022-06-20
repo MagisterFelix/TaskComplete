@@ -212,9 +212,9 @@ export class Navbar extends React.Component {
                                 <img src={this.props.user.image} width="50" height="50" className="rounded-circle" alt="user_image" />
                             </div>
                             <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                {this.props.user.premium && <button className="dropdown-item" onClick={this.handleClick}>{strings.add_all_to_calendar}</button>}
                                 <Link to={'/profile'} className="dropdown-item">{strings.profile}</Link>
                                 <Link to={'/statistics'} className="dropdown-item">{strings.statistics}</Link>
+                                {this.props.user.premium && <button className="dropdown-item" onClick={this.handleClick}>{strings.add_all_to_calendar}</button>}
                                 <Link to={'/login'} className="dropdown-item" onClick={() => { this.logout(); localStorage.removeItem('token'); window.location.href = '/login'; }}>{strings.logout}</Link>
                             </div>
                         </li>
