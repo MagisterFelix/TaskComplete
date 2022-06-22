@@ -6,6 +6,7 @@ from core.app.views.subtask_view import SubtaskView
 from core.app.views.tag_view import TagView
 from core.app.views.extra_view import ExtraView
 from core.app.views.statistics_view import StatisticsView
+from core.app.views.admin_view import AdminView
 
 urlpatterns = [
     url(r'^signUp/?$', UserRegistrationView.as_view()),
@@ -20,4 +21,5 @@ urlpatterns = [
     url(r'^extra/task=(?P<task_primary_key>\d+)/?$', ExtraView().as_view()),
     url(r'^extra/task=(?P<task_primary_key>\d+)/id=(?P<primary_key>\d+)/?$', ExtraView().as_view()),
     url(r'^statistics/?$', StatisticsView.as_view()),
+    url(r'^administrator/?$', AdminView().as_view()),
 ]
