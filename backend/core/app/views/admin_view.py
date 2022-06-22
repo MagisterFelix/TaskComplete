@@ -39,11 +39,11 @@ class AdminView(APIView):
             status_code = status.HTTP_200_OK
             message = 'Info received successfully.'
             data = {
-                'users': users,
-                'tasks': tasks,
-                'subtasks': subtasks,
-                'tags': tags,
-                'extras': extras
+                'User': users,
+                'Task': tasks,
+                'Subtask': subtasks,
+                'Tag': tags,
+                'Extra': extras
             }
 
             response = {
