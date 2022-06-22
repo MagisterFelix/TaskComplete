@@ -103,6 +103,7 @@ class UserProfileView(APIView):
             'email': user.email,
             'name': user.name,
             'image': user.image,
+            'is_staff': user.is_staff,
             'premium':  bool(user.premium)
         }
 
