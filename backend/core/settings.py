@@ -132,7 +132,7 @@ DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': BASE_DIR / 'backup'}
 
 CRONJOBS = [
-    ('0 0 * * *', 'core.cron.backup')
+    ('0 0 * * *', 'core.management.backup')
 ]
 
 LANGUAGE_CODE = 'en-us'
