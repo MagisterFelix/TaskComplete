@@ -50,7 +50,6 @@ export class Subtask extends React.Component {
         }
     }
 
-
     handleModalShowHide(subtask) {
         this.setState({ subtask: subtask, showHide: !this.state.showHide });
     }
@@ -69,7 +68,7 @@ export class Subtask extends React.Component {
         subtask_box.className = 'subtask_box';
     }
 
-    delete(id) {
+    handleDeleteSubtask = id => {
         axios.delete(API.subtask.replace('task_id', this.props.task).replace('subtask_id', id), { headers })
             .then(() => {
                 axios.get(API.subtasks.replace('task_id', this.props.task), { headers })
@@ -152,7 +151,6 @@ export class Subtask extends React.Component {
             });
     }
 
-
     updateInput() {
         let input = document.getElementById('input_subtask');
         input.value = this.state.subtask.title;
@@ -174,7 +172,7 @@ export class Subtask extends React.Component {
                     <label className="form-check-label" htmlFor={"flexCheck" + subtask_index}><span className="fst-italic pl-1">{subtask.title}</span></label>
                     <div className="subtask_box" id={"subtask_box" + subtask.id}>
                         <i className="fa fa-pencil mr-2" onClick={() => this.handleModalShowHide(subtask)}></i>
-                        <i className="fa fa-trash ml-2" onClick={() => this.delete(subtask.id)}></i>
+                        <i className="fa fa-trash ml-2" onClick={() => this.handleDeleteSubtask(subtask.id)}></i>
                     </div>
                 </div >
 
@@ -201,8 +199,8 @@ export class Subtask extends React.Component {
                                 <div className="col-7">
                                     <div className="subtask-input">
                                         <div className="form-group">
-                                            <label htmlFor="input_subtask">Title</label>
-                                            <input required type="text" name="input_subtask" id="input_subtask" placeholder="New title..." onChange={this.handleChangeSubtask} />
+                                            <label htmlFor="input_subtask">{strings.title}</label>
+                                            <input required type="text" name="input_subtask" id="input_subtask" placeholder={strings.new_title} onChange={this.handleChangeSubtask} />
                                         </div>
                                     </div>
                                 </div>

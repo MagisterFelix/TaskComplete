@@ -95,7 +95,7 @@ export class Task extends React.Component {
             task: null,
             date: null,
             title: '',
-            description: '',
+            description: null,
             priority: 0,
             reminder: 0,
             sortDate: 0,
@@ -660,7 +660,7 @@ export class Task extends React.Component {
             });
     }
 
-    delete(id) {
+    handleDeleteSubtask = id => {
         if (this.props.user.premium) {
             this.removeFromCalendar(id);
         }
@@ -735,7 +735,7 @@ export class Task extends React.Component {
         const body = {
             date: this.state.date ? this.state.date : this.state.task.date,
             title: this.state.title ? this.state.title : this.state.task.title,
-            description: this.state.description ? this.state.description : this.state.task.description,
+            description: (this.state.description !== null) ? this.state.description : this.state.task.description,
             priority: this.state.priority ? parseInt(this.state.priority) : this.state.task.priority,
             reminder: this.state.reminder ? parseInt(this.state.reminder) : this.state.task.reminder
         };
@@ -845,7 +845,7 @@ export class Task extends React.Component {
                             <div className="task_UD d-flex justify-content-center align-items-center mx-5 p-3">
                                 {this.props.user.premium && <i className="fa fa-calendar-plus-o fa-2x mr-3" onClick={() => this.addToCalendar(task)}></i>}
                                 <i className="fa fa-pencil fa-2x mr-2" onClick={() => this.handleModalShowHide(task)}></i>
-                                <i className="fa fa-trash fa-2x ml-2" onClick={() => this.delete(task.id)}></i>
+                                <i className="fa fa-trash fa-2x ml-2" onClick={() => this.handleDeleteTask(task.id)}></i>
                             </div>
                             {
                                 priority.length ?
@@ -907,7 +907,7 @@ export class Task extends React.Component {
             <>
                 <Modal show={this.state.showHideError}>
                     <Modal.Header closeButton onClick={() => this.handleModalShowHideError()}>
-                        <Modal.Title>Something wrong...</Modal.Title>
+                        <Modal.Title>{strings.wrong}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {this.state.errorMessage}
@@ -948,15 +948,15 @@ export class Task extends React.Component {
                                         <div className="task-input">
                                             <div className="form-group">
                                                 <label htmlFor="date">{strings.date}</label>
-                                                <input required={!this.state.task} type="date" min={tomorrow.toISOString().slice(0, 10)} name="date" id="date" placeholder="New date..." onChange={this.handleChangeTask} />
+                                                <input required={!this.state.task} type="date" min={tomorrow.toISOString().slice(0, 10)} name="date" id="date" placeholder={strings.new_date} onChange={this.handleChangeTask} />
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="title">{strings.title}</label>
-                                                <input required={!this.state.task} type="text" name="title" id="title" placeholder="New title..." onChange={this.handleChangeTask} />
+                                                <input required={!this.state.task} type="text" name="title" id="title" placeholder={strings.new_title} onChange={this.handleChangeTask} />
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="description">{strings.description}</label>
-                                                <textarea type="text" name="description" id="description" cols="30" rows="10" placeholder="New description..." onChange={this.handleChangeTask} />
+                                                <textarea type="text" name="description" id="description" cols="30" rows="10" placeholder={strings.new_description} onChange={this.handleChangeTask} />
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="priority">{strings.priority}</label>

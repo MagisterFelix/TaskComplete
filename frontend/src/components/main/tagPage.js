@@ -67,7 +67,7 @@ export class Tag extends React.Component {
         tag_box.className = 'tag_box';
     }
 
-    delete(id) {
+    handleDeleteTag = id => {
         axios.delete(API.tag.replace('task_id', this.props.task).replace('tag_id', id).replace('subtask_id', id), { headers })
             .then(() => {
                 axios.get(API.tags.replace('task_id', this.props.task), { headers })
@@ -157,7 +157,7 @@ export class Tag extends React.Component {
                     #{tag.title.toLowerCase()}
                     <div className="tag_box" id={"tag_box" + tag.id}>
                         <i className="fa fa-pencil mr-2" onClick={() => this.handleModalShowHide(tag)}></i>
-                        <i className="fa fa-trash ml-2" onClick={() => this.delete(tag.id)}></i>
+                        <i className="fa fa-trash ml-2" onClick={() => this.handleDeleteTag(tag.id)}></i>
                     </div>
                 </h6>
             )
@@ -184,7 +184,7 @@ export class Tag extends React.Component {
                                     <div className="tag-input">
                                         <div className="form-group">
                                             <label htmlFor="input_tag">{strings.title}</label>
-                                            <input required type="text" name="update_tag" id="update_tag" placeholder="New title..." onChange={this.handleChangeTag} />
+                                            <input required type="text" name="update_tag" id="update_tag" placeholder={strings.new_title} onChange={this.handleChangeTag} />
                                         </div>
                                     </div>
                                 </div>
