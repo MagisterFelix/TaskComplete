@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'import_export',
     'django_crontab',
     'dbbackup',
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
