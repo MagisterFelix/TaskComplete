@@ -24,13 +24,13 @@ class UserCreationForm(forms.ModelForm):
 @admin.register(User)
 class UserAdmin(ImportExportMixin, UserAdmin):
     add_form = UserCreationForm
-    list_display = ('email', 'name',)
+    list_display = ('email', 'name', 'is_staff',)
     ordering = ('email',)
     search_fields = ('email',)
     fieldsets = (
         (None, {
             'fields': (
-                'email', 'password', 'name', 'image', 'premium',)
+                'email', 'password', 'name', 'image', 'premium', 'is_staff',)
         }),
     )
     add_fieldsets = (
