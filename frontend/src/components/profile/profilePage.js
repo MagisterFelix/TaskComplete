@@ -78,7 +78,7 @@ export class Profile extends React.Component {
                                     <div className="col-6">
                                         <div className="form-group">
                                             <label htmlFor="username">{strings.username}</label>
-                                            <input type="text" name="username" id="username" placeholder="Username" onChange={this.handleChange} />
+                                            <input type="text" name="username" id="username" placeholder={strings.new_name} onChange={this.handleChange} />
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="image">{strings.image}</label>
@@ -86,7 +86,7 @@ export class Profile extends React.Component {
                                         </div>
                                         {!this.props.user.premium ?
                                             <div className="form-group mt-4">
-                                                <label htmlFor="premium">Premium - 10$</label>
+                                                <label htmlFor="premium">{strings.premium.substring(0, 7)} - 10$</label>
                                                 <GooglePayButton
                                                     environment="TEST"
                                                     paymentRequest={{

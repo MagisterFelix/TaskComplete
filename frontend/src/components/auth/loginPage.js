@@ -6,6 +6,7 @@ import { Modal } from "react-bootstrap";
 import axios from 'axios';
 import API from '../../api/links';
 import "./style.scss";
+import strings from "../../locale/locale";
 
 export class Login extends React.Component {
     constructor(props) {
@@ -75,7 +76,7 @@ export class Login extends React.Component {
                     <div className="wrapper">
                         <div className="row">
                             <div className="col">
-                                <div className="header">Login</div>
+                                <div className="header">{strings.login}</div>
                             </div>
                         </div>
                         <div className="row">
@@ -84,12 +85,12 @@ export class Login extends React.Component {
                                     <div className="row mx-4 my-3">
                                         <div className="col-6">
                                             <div className="form-group">
-                                                <label htmlFor="email">Email</label>
-                                                <input required type="email" name="email" id="email" placeholder="email" onChange={this.handleChange} />
+                                                <label htmlFor="email">{strings.email}</label>
+                                                <input required type="email" name="email" id="email" placeholder={strings.email} onChange={this.handleChange} />
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="password">Password</label>
-                                                <input required type="password" name="password" id="password" placeholder="password" onChange={this.handleChange} />
+                                                <label htmlFor="password">{strings.password}</label>
+                                                <input required type="password" name="password" id="password" placeholder={strings.password} onChange={this.handleChange} />
                                             </div>
                                         </div>
                                         <div className="col-6">
@@ -101,7 +102,7 @@ export class Login extends React.Component {
                                     <div className="row">
                                         <div className="col">
                                             <div className="footer">
-                                                <button type="submit" className="button">Login</button>
+                                                <button type="submit" className="button">{strings.login}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -113,7 +114,7 @@ export class Login extends React.Component {
                         <div className="right-side right">
                             <div className="inner-container">
                                 <div className="text">
-                                    Register
+                                    {strings.register}
                                 </div>
                             </div>
                         </div>

@@ -13,13 +13,17 @@ const headers = {
     'Content-Type': 'application/json'
 };
 
+if (!localStorage.getItem('locale')) {
+    localStorage.setItem('locale', strings.getLanguage());
+}
+
 export class Navbar extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            tasks: null,
+            tasks: null
         }
 
         this._isMounted = false;
@@ -174,6 +178,26 @@ export class Navbar extends React.Component {
         });
     }
 
+    getLocale() {
+        let locale;
+        if (localStorage.getItem('locale') == 'en') {
+            locale = <img src="https://cdn-icons-png.flaticon.com/512/323/323310.png" alt="en" width="50" height="50" />
+        }
+        if (localStorage.getItem('locale') == 'uk') {
+            locale = <img src="https://cdn-icons-png.flaticon.com/512/197/197572.png" alt="uk" width="50" height="50" />
+        }
+        return locale;
+    }
+
+    setLocale() {
+        if (localStorage.getItem('locale') == 'en') {
+            localStorage.setItem('locale', 'uk');
+        } else if (localStorage.getItem('locale') == 'uk') {
+            localStorage.setItem('locale', 'en');
+        }
+        window.location.reload();
+    }
+
     logout() {
         this.gapi.load('client:auth2', () => {
 
@@ -192,6 +216,9 @@ export class Navbar extends React.Component {
                 }
             });
         });
+
+        localStorage.removeItem('token');
+        window.location.href = '/login';
     }
 
     render() {
@@ -205,6 +232,9 @@ export class Navbar extends React.Component {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse d-flex justify-content-end" id="navbar-list-4">
+                    <div className="locale mr-3" onClick={this.setLocale}>
+                        {this.getLocale()}
+                    </div>
                     <ul className="navbar-nav">
                         <li className="nav-item dropdown">
                             <div className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -212,10 +242,11 @@ export class Navbar extends React.Component {
                                 <img src={this.props.user.image} width="50" height="50" className="rounded-circle" alt="user_image" />
                             </div>
                             <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                {this.props.user.is_staff && <Link to={'/admin'} className="dropdown-item">{strings.admin_panel}</Link>}
                                 <Link to={'/profile'} className="dropdown-item">{strings.profile}</Link>
                                 <Link to={'/statistics'} className="dropdown-item">{strings.statistics}</Link>
                                 {this.props.user.premium && <button className="dropdown-item" onClick={this.handleClick}>{strings.add_all_to_calendar}</button>}
-                                <Link to={'/login'} className="dropdown-item" onClick={() => { this.logout(); localStorage.removeItem('token'); window.location.href = '/login'; }}>{strings.logout}</Link>
+                                <Link to={'/login'} className="dropdown-item" onClick={() => { this.logout(); }}>{strings.logout}</Link>
                             </div>
                         </li>
                     </ul>

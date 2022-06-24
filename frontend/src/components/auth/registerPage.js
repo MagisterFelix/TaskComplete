@@ -5,6 +5,7 @@ import { Modal } from "react-bootstrap";
 import axios from 'axios';
 import API from '../../api/links';
 import registerImage from './register.svg';
+import strings from "../../locale/locale";
 
 const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -146,7 +147,7 @@ export class Register extends React.Component {
                     <div className="wrapper">
                         <div className="row">
                             <div className="col">
-                                <div className="header">Register</div>
+                                <div className="header">{strings.register}</div>
                             </div>
                         </div>
                         <div className="row">
@@ -155,39 +156,39 @@ export class Register extends React.Component {
                                     <div className="row mx-4 my-3">
                                         <div className="col-6">
                                             <div className="form-group">
-                                                <label htmlFor="username">Username
+                                                <label htmlFor="username">{strings.username}
                                                     {formErrors.username.length > 0 && (
                                                         <span className="error">{formErrors.username}</span>
                                                     )}
                                                 </label>
-                                                <input required type="text" name="username" id="username" placeholder="Username" onChange={this.handleChange}
+                                                <input required type="text" name="username" id="username" placeholder={strings.new_name} onChange={this.handleChange}
                                                     className={formErrors.username.length > 0 ? "error" : null} />
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="email">Email
+                                                <label htmlFor="email">{strings.email}
                                                     {formErrors.email.length > 0 && (
                                                         <span className="error">{formErrors.email}</span>
                                                     )}
                                                 </label>
-                                                <input required type="email" name="email" id="email" placeholder="Email" onChange={this.handleChange}
+                                                <input required type="email" name="email" id="email" placeholder={strings.email} onChange={this.handleChange}
                                                     className={formErrors.email.length > 0 ? "error" : null} />
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="password">Password
+                                                <label htmlFor="password">{strings.password}
                                                     {formErrors.password.length > 0 && (
                                                         <span className="error">{formErrors.password}</span>
                                                     )}
                                                 </label>
-                                                <input required type="password" name="password" id="password" placeholder="Password" onChange={this.handleChange}
+                                                <input required type="password" name="password" id="password" placeholder={strings.password} onChange={this.handleChange}
                                                     className={formErrors.password.length > 0 ? "error" : null} />
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="rpassword">Repeat password
+                                                <label htmlFor="rpassword">{strings.repeat_password}
                                                     {formErrors.rpassword.length > 0 && (
                                                         <span className="error">{formErrors.rpassword}</span>
                                                     )}
                                                 </label>
-                                                <input required type="password" name="rpassword" id="rpassword" placeholder="Password" onChange={this.handleChange}
+                                                <input required type="password" name="rpassword" id="rpassword" placeholder={strings.password} onChange={this.handleChange}
                                                     className={formErrors.rpassword.length > 0 ? "error" : null} />
                                             </div>
                                         </div>
@@ -200,7 +201,7 @@ export class Register extends React.Component {
                                     <div className="row">
                                         <div className="col">
                                             <div className="footer">
-                                                <button type="submit" className="button">Register</button>
+                                                <button type="submit" className="button">{strings.register}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -212,7 +213,7 @@ export class Register extends React.Component {
                         <div className="right-side left">
                             <div className="inner-container">
                                 <div className="text">
-                                    Login
+                                    {strings.login}
                                 </div>
                             </div>
                         </div>
