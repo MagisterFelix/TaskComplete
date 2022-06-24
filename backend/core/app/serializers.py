@@ -52,9 +52,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'email', 'password', 'name', 'image', 'premium'
+            'email', 'password', 'name', 'image', 'premium', 'is_staff'
         )
-        extra_kwargs = {'email': {'required': False}, 'password': {'required': False}}
+        extra_kwargs = {'email': {'required': False}, 'password': {'required': False}, 'is_staff': {'required': False}}
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
