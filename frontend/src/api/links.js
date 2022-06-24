@@ -12,7 +12,8 @@ const API = {
     tag: host + "/tags/task=task_id/id=tag_id",
     extras: host + "/extra/task=task_id",
     extra: host + "/extra/task=task_id/id=tag_id",
-    statistics: host + "/statistics"
+    statistics: host + "/statistics",
+    admin: host + "/administrator"
 }
 
 export default API;
