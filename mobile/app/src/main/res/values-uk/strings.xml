@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TaskComplete</string>
+    <string name="signIn">Авторизація</string>
+    <string name="email">Пошта</string>
+    <string name="image_auth_background">image_auth_background</string>
+    <string name="password">Пароль</string>
+    <string name="login">Авторизація</string>
+    <string name="register">Реєстрація</string>
+    <string name="signUp">Реєстрація</string>
+    <string name="username">Ім\'я</string>
+    <string name="repeat_password">Повторіть пароль</string>
+    <string name="logout">Вихід</string>
+    <string name="add_task">Додати задачу</string>
+    <string name="sort_by_date">Сортувати за датою</string>
+    <string name="sort_by_priority">Сортувати за пріорітетом</string>
+    <string name="description">Опис</string>
+    <string name="subtasks">Підзавдання</string>
+    <string name="new_subtask">Нове підзавдання…</string>
+    <string name="submit">Надіслати</string>
+    <string name="extra">Екстра</string>
+    <string name="new_extra">Нове екстра…</string>
+    <string name="edit">Змінити</string>
+    <string name="title">Назва</string>
+    <string name="delete">Видалити</string>
+    <string name="edit_sym">📝</string>
+    <string-array name="priority_array">
+        <item>Без</item>
+        <item>Високий</item>
+        <item>Середній</item>
+        <item>Низький</item>
+    </string-array>
+</resources>
