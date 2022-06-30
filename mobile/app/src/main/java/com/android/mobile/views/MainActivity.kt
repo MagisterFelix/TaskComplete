@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
     private var sortPriority: Int = -1
     private var sortDate: Int = -1
+    private lateinit var locale: Locale
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +44,28 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        if (sessionManager.getLocale() == "en") {
+            menu?.getItem(0)?.setIcon(R.drawable.en)
+        } else if (sessionManager.getLocale() == "uk") {
+            menu?.getItem(0)?.setIcon(R.drawable.uk)
+        }
+        setLocale()
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+
+        if (id == R.id.locale) {
+            if (sessionManager.getLocale() == "en") {
+                sessionManager.setLocale("uk")
+            } else if (sessionManager.getLocale() == "uk") {
+                sessionManager.setLocale("en")
+            }
+
+            setLocale()
+            refresh()
+        }
 
         if (id == R.id.sort_by_priority) {
             sortDate = -1
@@ -70,6 +88,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setLocale() {
+        locale = Locale(sessionManager.getLocale().toString())
+        val res = resources
+        val dm = res.displayMetrics
+        val conf = res.configuration
+        conf.locale = locale
+        res.updateConfiguration(conf, dm)
+    }
+
+    private fun refresh() {
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     fun toLogin() {
@@ -306,7 +337,7 @@ class MainActivity : AppCompatActivity() {
                     taskId = task.id,
                     taskDate = task.date,
                     taskTitle = task.title,
-                    taskDescription = (if (task.description.isEmpty()) "No description" else task.description),
+                    taskDescription = (task.description.ifEmpty { "No description" }),
                     taskDone = task.done,
                     taskPriority = task.priority
                 )

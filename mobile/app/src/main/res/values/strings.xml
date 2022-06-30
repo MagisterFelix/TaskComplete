@@ -23,6 +23,7 @@
     <string name="title">Title</string>
     <string name="delete">Delete</string>
     <string name="edit_sym">📝</string>
+    <string name="locale">Locale</string>
     <string-array name="priority_array">
         <item>No priority</item>
         <item>High</item>

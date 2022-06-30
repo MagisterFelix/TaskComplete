@@ -24,6 +24,7 @@
     <string name="title">Назва</string>
     <string name="delete">Видалити</string>
     <string name="edit_sym">📝</string>
+    <string name="locale">Локаль</string>
     <string-array name="priority_array">
         <item>Без</item>
         <item>Високий</item>

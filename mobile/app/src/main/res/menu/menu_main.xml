@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".views.MainActivity">
 
     <item
+        android:id="@+id/locale"
+        android:title="@string/locale"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/sort_by_date"
         android:title="@string/sort_by_date"
         app:showAsAction="never" />

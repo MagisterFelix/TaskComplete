@@ -9,6 +9,7 @@ class SessionManager (context: Context) {
 
     companion object {
         const val USER_TOKEN = "user_token"
+        const val LOCALE = "locale"
     }
 
     fun saveToken(token: String) {
@@ -17,8 +18,18 @@ class SessionManager (context: Context) {
         editor.apply()
     }
 
+    fun setLocale(locale: String) {
+        val editor = prefs.edit()
+        editor.putString(LOCALE, locale)
+        editor.apply()
+    }
+
     fun fetchToken(): String? {
         return prefs.getString(USER_TOKEN, null)
+    }
+
+    fun getLocale(): String? {
+        return prefs.getString(LOCALE, "en")
     }
 
     fun removeToken() {
@@ -28,5 +39,4 @@ class SessionManager (context: Context) {
             editor.apply()
         }
     }
-
 }
