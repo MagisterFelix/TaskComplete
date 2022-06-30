@@ -26,7 +26,7 @@
     <string name="edit_sym">📝</string>
     <string name="locale">Локаль</string>
     <string-array name="priority_array">
-        <item>Без</item>
+        <item>Без пріорітету</item>
         <item>Високий</item>
         <item>Середній</item>
         <item>Низький</item>
