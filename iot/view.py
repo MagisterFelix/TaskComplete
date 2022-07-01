@@ -25,7 +25,7 @@ class View:
 
         return []
 
-    def complete_task(self, task_id):
+    def update_task(self, task_id, done):
         response = requests.put(
             config.task.replace('task_id', str(task_id)),
             headers={
@@ -33,7 +33,7 @@ class View:
                 'Accept': '*/*',
                 'Content-Type': 'application/json'
             },
-            data=json.dumps({'done': True})
+            data=json.dumps({'done': done})
         )
 
         if response.status_code == 401:

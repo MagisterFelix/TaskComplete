@@ -13,11 +13,13 @@ class Display(tkinter.Tk):
 
         self.width, self.height = 600, 800
 
-        self.canvas = tkinter.Canvas(self, bg='white', width=self.width, height=self.height)
+        self.canvas = tkinter.Canvas(
+            self, bg='white', width=self.width, height=self.height)
         self.canvas.pack()
 
         self.view = View()
-        self.priorities = ['No priority', 'High priority', 'Medium priority', 'Low priority']
+        self.priorities = ['No priority', 'High priority',
+                           'Medium priority', 'Low priority']
 
         self.draw()
 
@@ -28,20 +30,26 @@ class Display(tkinter.Tk):
 
         days_of_week = calendar.weekheader(10).split()
         x, y = 0, 0
-        self.canvas.create_rectangle(x, y, x + self.width // 2.5, y + self.height, fill='black')
+        self.canvas.create_rectangle(
+            x, y, x + self.width // 2.5, y + self.height, fill='black')
 
-        self.canvas.create_line(0, 120, x + self.width // 2.5, y + 120, width=5, fill='white')
+        self.canvas.create_line(0, 120, x + self.width //
+                                2.5, y + 120, width=5, fill='white')
 
         x, y = 120, 200
-        self.canvas.create_text(x, y, text=days_of_week[datetime.today().weekday()], font='Sans 28', fill='white')
+        self.canvas.create_text(
+            x, y, text=days_of_week[datetime.today().weekday()], font='Sans 28', fill='white')
         y += 60
-        self.canvas.create_text(x, y, text=datetime.today().day, font='Sans 44', fill='white')
+        self.canvas.create_text(
+            x, y, text=datetime.today().day, font='Sans 44', fill='white')
         y += 50
-        self.canvas.create_text(x, y, text=datetime.today().strftime('%B %Y'), font='Sans 16', fill='white')
+        self.canvas.create_text(x, y, text=datetime.today().strftime(
+            '%B %Y'), font='Sans 16', fill='white')
 
         x, y = 20, 400
         for day_of_week in days_of_week:
-            self.canvas.create_text(x, y, text=day_of_week[:2], anchor='w', font='Sans 12', fill='white')
+            self.canvas.create_text(
+                x, y, text=day_of_week[:2], anchor='w', font='Sans 12', fill='white')
             x += 30
 
         y = 440
@@ -54,16 +62,19 @@ class Display(tkinter.Tk):
                 elif day < 10:
                     day = ' ' + str(day)
 
-                self.canvas.create_text(x, y, text=day, font='Sans 12', fill='white')
+                self.canvas.create_text(
+                    x, y, text=day, font='Sans 12', fill='white')
 
                 x += 30
             y += 40
 
-        self.canvas.create_line(0, y + 40, x + self.width // 2.5, y + 40, width=5, fill='white')
+        self.canvas.create_line(
+            0, y + 40, x + self.width // 2.5, y + 40, width=5, fill='white')
 
         def update(event, obj, task_id):
-            self.canvas.itemconfigure(obj, fill='black')
-            self.view.complete_task(task_id)
+            self.canvas.itemconfigure(
+                obj, fill='black' if not tasks[i]['done'] else 'white')
+            self.view.update_task(task_id, not tasks[i]['done'])
 
         def helper(obj, task_id):
             return lambda event: update(event, obj, task_id)
@@ -78,8 +89,9 @@ class Display(tkinter.Tk):
                 self.canvas.create_line(x + self.width // 2.5, y + self.height // 16,
                                         x + self.width, y + self.height // 16)
                 check_box = self.canvas.create_rectangle(x + self.width // 2.3, y + 15,
-                                                         x + self.width // 2.3 + 20, y + 35, fill='white')
-                self.canvas.tag_bind(check_box, '<Button-1>', helper(check_box, tasks[i]['id']))
+                                                         x + self.width // 2.3 + 20, y + 35, fill='white' if not tasks[i]['done'] else 'black')
+                self.canvas.tag_bind(
+                    check_box, '<Button-1>', helper(check_box, tasks[i]['id']))
                 self.canvas.create_text((x + self.width // 2,
                                          y + self.height // 32),
                                         text=tasks[i]['title'], anchor='w', font=('Sans 18'), fill=['black', 'red'][0 < tasks[i]['priority'] < 3])
@@ -87,7 +99,7 @@ class Display(tkinter.Tk):
                                          y + self.height // 32),
                                         text=datetime.strptime(tasks[i]['date'], '%Y-%m-%d').strftime('%b %d'), anchor='e', font=('Roboto 14'))
 
-        self.after(5000, self.draw)
+        self.after(1000, self.draw)
 
 
 if __name__ == '__main__':
