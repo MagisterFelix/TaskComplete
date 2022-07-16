@@ -38,4 +38,4 @@ class View:
 
         if response.status_code == 401:
             self.auth.log_in()
-            self.complete_task()
+            self.update_task()
