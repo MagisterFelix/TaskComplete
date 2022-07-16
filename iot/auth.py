@@ -8,7 +8,7 @@ class Authorization:
     def log_in(self):
         response = requests.post(
             config.signIn,
-            data={'email': 'user@gmail.com', 'password': 'user'}
+            data={'email': 'user@gmail.com', 'password': '123456user'}
         ).json()
         self.__token = response['token']
 
