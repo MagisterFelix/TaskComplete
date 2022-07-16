@@ -72,7 +72,7 @@ const Mircophone = ({ onPostTask, onPutTask, onDeleteTask, onAddToCalendar, onDo
                         onClick={() => { SpeechRecognition.stopListening(); resetTranscript() }}><i className="fa fa-microphone"></i></div>
                     :
                     <div className="microphone mic-disabled" id="microphone"
-                        onClick={() => SpeechRecognition.startListening({ language: languages[navigator.language] })}><i className="fa fa-microphone"></i></div>
+                        onClick={() => SpeechRecognition.startListening({ language: languages[localStorage.getItem("locale")] })}><i className="fa fa-microphone"></i></div>
             }
         </>
     )
