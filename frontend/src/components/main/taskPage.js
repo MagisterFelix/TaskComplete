@@ -655,7 +655,9 @@ export class Task extends React.Component {
                 axios.get(API.tasks, { headers })
                     .then(response => {
                         this._isMounted && this.setState({ tasks: response.data.data });
-                        done.className = 'fa fa-square-o fa-3x square mr-1';
+                        if (this.state.tasks.length > 1) {
+                            done.className = 'fa fa-square-o fa-3x square mr-1';
+                        }
                     });
             });
     }
