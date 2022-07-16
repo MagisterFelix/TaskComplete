@@ -773,6 +773,20 @@ export class Task extends React.Component {
         this.setState({ [name]: value });
     };
 
+
+    handleDeleteTask = id => {
+        if (this.props.user.premium) {
+            this.removeFromCalendar(id);
+        }
+        axios.delete(API.task.replace('task_id', id), { headers })
+            .then(() => {
+                axios.get(API.tasks, { headers })
+                    .then(response => {
+                        this._isMounted && this.setState({ tasks: response.data.data });
+                    });
+            });
+    }
+
     updateInput() {
         if (this.state.task) {
             let date = document.getElementById('date');
